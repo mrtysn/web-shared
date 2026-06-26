@@ -1,0 +1,130 @@
+/* Component styles for @mrtysn/web-shared primitives.
+   Hooks into classless.css theme vars (--cfg/--cbg/--cdark/--clight/--cmed/--cemph),
+   which already flip on prefers-color-scheme. No extra themes. */
+
+.ws-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ws-grid-min, 260px), 1fr));
+  gap: 10px;
+}
+
+.ws-card {
+  border: 1px solid var(--cmed);
+  border-radius: 10px;
+  background: var(--clight);
+  padding: 10px 12px;
+}
+.ws-card--muted {
+  opacity: 0.65;
+  border-style: dashed;
+}
+.ws-card__head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ws-card__title {
+  font-weight: 600;
+}
+.ws-card__desc {
+  font-size: 0.86rem;
+  margin-top: 3px;
+  color: var(--cfg);
+}
+.ws-card__desc--empty {
+  font-style: italic;
+  color: var(--cdark);
+}
+
+.ws-tags {
+  margin-top: 7px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.ws-tag {
+  font-size: 0.7rem;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--cbg);
+  border: 1px solid var(--cmed);
+  color: var(--cdark);
+}
+.ws-badge {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--cbg);
+  border: 1px solid var(--cmed);
+  color: var(--cdark);
+}
+
+.ws-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ws-search {
+  flex: 1;
+  min-width: 180px;
+  max-width: 360px;
+  padding: 6px 10px;
+  border: 1px solid var(--cmed);
+  border-radius: 8px;
+  background: var(--cbg);
+  color: var(--cfg);
+  font: inherit;
+}
+.ws-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ws-chip {
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 3px 9px;
+  border: 1px solid var(--cmed);
+  border-radius: 999px;
+  background: var(--clight);
+  color: var(--cfg);
+  cursor: pointer;
+}
+.ws-chip--active {
+  background: var(--cemph);
+  border-color: var(--cemph);
+  color: #fff;
+}
+.ws-toolbar__right {
+  margin-left: auto;
+  color: var(--cdark);
+  font-size: 0.8rem;
+}
+
+.ws-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.ws-stat {
+  display: flex;
+  flex-direction: column;
+}
+.ws-stat__value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.ws-stat__value--good { color: #2f7d4f; }
+.ws-stat__value--bad { color: #b4452f; }
+.ws-stat__value--warn { color: var(--cemph); }
+.ws-stat__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--cdark);
+}

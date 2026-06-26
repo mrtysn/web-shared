@@ -1,0 +1,17 @@
+{
+  "name": "@mrtysn/web-shared",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Mert's house web style + generic React components, shared across projects via submodule.",
+  "license": "AGPL-3.0-or-later",
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles/classless.css": "./src/styles/classless.css",
+    "./styles/components.css": "./src/styles/components.css"
+  }
+}
