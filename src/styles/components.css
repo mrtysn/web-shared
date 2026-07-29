@@ -26,6 +26,12 @@
 }
 .ws-card__title {
   font-weight: 600;
+  /* A flex item won't shrink below its min-content width by default, and a
+     title with no spaces (an email, a URL, a package id) is one unbreakable
+     token — so it would spill past the card border. `anywhere` both allows the
+     break and shrinks min-content so the flex line can actually reflow. */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .ws-card__desc {
   font-size: 0.86rem;
