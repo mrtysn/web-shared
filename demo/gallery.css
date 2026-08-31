@@ -1,0 +1,93 @@
+/* Gallery chrome only — nothing here is part of the house style. */
+
+/* classless.css caps the body at a reading measure; a component gallery is a
+   grid of specimens and wants the window. */
+body {
+  max-width: none;
+}
+
+.gal {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+}
+.gal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ws-rule);
+  margin-bottom: 28px;
+}
+.gal-head h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+.gal-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.gal-note {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--cdark);
+  max-width: 62ch;
+}
+.gal-row {
+  margin-bottom: 36px;
+}
+.gal-row__head {
+  margin-bottom: 12px;
+}
+.gal-row h2 {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--cdark);
+}
+.gal-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.gal-swatch {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.7rem;
+}
+.gal-swatch code {
+  background: none;
+  padding: 0;
+  font-size: 0.68rem;
+  color: var(--cdark);
+}
+.gal-swatch__chip {
+  width: 76px;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid var(--ws-rule);
+}
+.gal-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.gal-slot {
+  margin-top: 8px;
+  padding: 8px;
+  border: 1px dashed var(--ws-rule);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--cdark);
+  text-align: center;
+}

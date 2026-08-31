@@ -1,21 +1,55 @@
 /* Component styles for @mrtysn/web-shared primitives.
    Hooks into classless.css theme vars (--cfg/--cbg/--cdark/--clight/--cmed/--cemph),
-   which already flip on prefers-color-scheme. No extra themes. */
+   which already flip on prefers-color-scheme. No extra themes.
+
+   House rules these components follow:
+   - A badge marks an exception. It never repeats what the row already says, and
+     it never outshouts the title it sits next to.
+   - Status colour is a token, not a literal, because the same green that reads
+     on white disappears on a dark ground.
+   - Rules and separators are one token, so density can be retuned in one place. */
+
+:root,
+html[data-theme="dark"] {
+  --ws-rule: color-mix(in srgb, var(--cmed) 45%, transparent);
+  --ws-good: #4c9a72;
+  --ws-bad: #e07a5f;
+  --ws-radius: 10px;
+}
+html[data-theme="light"] {
+  --ws-rule: color-mix(in srgb, var(--cmed) 80%, transparent);
+  --ws-good: #2f7d4f;
+  --ws-bad: #b4452f;
+}
+
+/* An app page is a set of panels, not a document; classless.css's per-section
+   ornament and prose leading belong to the writing side of the house. */
+.ws-app section:after {
+  content: none;
+  display: none;
+}
+.ws-app {
+  line-height: 1.45;
+}
 
 .ws-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--ws-grid-min, 260px), 1fr));
-  gap: 10px;
+  gap: 12px;
 }
 
 .ws-card {
-  border: 1px solid var(--cmed);
-  border-radius: 10px;
+  border: 1px solid var(--ws-rule);
+  border-radius: var(--ws-radius);
   background: var(--clight);
-  padding: 10px 12px;
+  padding: 11px 13px;
+  transition: border-color 0.15s ease;
+}
+.ws-card:hover {
+  border-color: var(--cmed);
 }
 .ws-card--muted {
-  opacity: 0.65;
+  opacity: 0.6;
   border-style: dashed;
 }
 .ws-card__head {
@@ -26,6 +60,7 @@
 }
 .ws-card__title {
   font-weight: 600;
+  line-height: 1.3;
   /* A flex item won't shrink below its min-content width by default, and a
      title with no spaces (an email, a URL, a package id) is one unbreakable
      token — so it would spill past the card border. `anywhere` both allows the
@@ -35,16 +70,17 @@
 }
 .ws-card__desc {
   font-size: 0.86rem;
-  margin-top: 3px;
+  margin-top: 4px;
   color: var(--cfg);
 }
 .ws-card__desc--empty {
   font-style: italic;
   color: var(--cdark);
+  opacity: 0.7;
 }
 
 .ws-tags {
-  margin-top: 7px;
+  margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -54,18 +90,19 @@
   padding: 1px 7px;
   border-radius: 999px;
   background: var(--cbg);
-  border: 1px solid var(--cmed);
+  border: 1px solid var(--ws-rule);
   color: var(--cdark);
 }
+/* Demoted from a bordered uppercase box: a badge sits beside a title, so it
+   has to be readable without competing with it. */
 .ws-badge {
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  padding: 1px 6px;
+  font-size: 0.68rem;
+  letter-spacing: 0.2px;
+  padding: 0 5px;
   border-radius: 4px;
-  background: var(--cbg);
-  border: 1px solid var(--cmed);
+  background: color-mix(in srgb, var(--cmed) 25%, transparent);
   color: var(--cdark);
+  white-space: nowrap;
 }
 
 .ws-toolbar {
@@ -85,6 +122,11 @@
   color: var(--cfg);
   font: inherit;
 }
+.ws-search:focus-visible {
+  outline: 2px solid var(--cemph);
+  outline-offset: 1px;
+  border-color: var(--cemph);
+}
 .ws-filters {
   display: flex;
   flex-wrap: wrap;
@@ -93,17 +135,22 @@
 .ws-chip {
   font: inherit;
   font-size: 0.78rem;
-  padding: 3px 9px;
-  border: 1px solid var(--cmed);
+  padding: 4px 11px;
+  border: 1px solid var(--ws-rule);
   border-radius: 999px;
   background: var(--clight);
   color: var(--cfg);
   cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.ws-chip:hover {
+  border-color: var(--cmed);
 }
 .ws-chip--active {
   background: var(--cemph);
   border-color: var(--cemph);
-  color: #fff;
+  color: var(--cbg);
+  font-weight: 600;
 }
 .ws-toolbar__right {
   margin-left: auto;
@@ -114,23 +161,25 @@
 .ws-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 18px;
 }
 .ws-stat {
   display: flex;
   flex-direction: column;
+  gap: 1px;
 }
 .ws-stat__value {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
 }
-.ws-stat__value--good { color: #2f7d4f; }
-.ws-stat__value--bad { color: #b4452f; }
+.ws-stat__value--good { color: var(--ws-good); }
+.ws-stat__value--bad { color: var(--ws-bad); }
 .ws-stat__value--warn { color: var(--cemph); }
 .ws-stat__label {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   color: var(--cdark);
 }
