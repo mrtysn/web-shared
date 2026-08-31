@@ -7,23 +7,36 @@ body {
 }
 
 .gal {
-  max-width: 1100px;
+  max-width: 1500px;
   margin: 0 auto;
-  padding: 24px 20px 80px;
+  padding: 0 20px 80px;
 }
+
+/* The controls have to be reachable from anywhere in the page — comparing a
+   specimen halfway down should not mean scrolling back to the top. */
 .gal-head {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  padding-bottom: 16px;
+  padding: 12px 0;
+  margin-bottom: 24px;
+  background: color-mix(in srgb, var(--cbg) 93%, transparent);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--ws-rule);
-  margin-bottom: 28px;
+}
+.gal-head__id {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
 }
 .gal-head h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 .gal-controls {
   display: flex;
@@ -35,13 +48,17 @@ body {
   margin: 4px 0 0;
   font-size: 0.82rem;
   color: var(--cdark);
-  max-width: 62ch;
+  max-width: 74ch;
 }
+.gal-head__id .gal-note {
+  margin: 0;
+}
+
 .gal-row {
-  margin-bottom: 36px;
+  margin-bottom: 40px;
 }
 .gal-row__head {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .gal-row h2 {
   margin: 0;
@@ -51,6 +68,46 @@ body {
   letter-spacing: 1px;
   color: var(--cdark);
 }
+/* The deltas, stated in values rather than adjectives. */
+.gal-changed {
+  margin: 8px 0 0;
+  padding-left: 1.1em;
+  font-size: 0.78rem;
+  color: var(--cdark);
+  max-width: 88ch;
+}
+.gal-changed li {
+  margin-bottom: 2px;
+}
+
+.gal-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+.gal-side {
+  position: relative;
+  border: 1px solid var(--ws-rule);
+  border-radius: 10px;
+  padding: 30px 14px 14px;
+  min-width: 0;
+}
+.gal-side__tag {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--cdark);
+  opacity: 0.8;
+}
+.gal-side__tag--after {
+  color: var(--cemph);
+  opacity: 1;
+}
+
 .gal-swatches {
   display: flex;
   flex-wrap: wrap;
@@ -61,7 +118,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 0.7rem;
 }
 .gal-swatch code {
   background: none;
@@ -80,7 +136,6 @@ body {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
 }
 .gal-slot {
   margin-top: 8px;
@@ -90,4 +145,10 @@ body {
   font-size: 0.75rem;
   color: var(--cdark);
   text-align: center;
+}
+
+@media (max-width: 900px) {
+  .gal-compare {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
