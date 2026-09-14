@@ -122,6 +122,11 @@ html[data-theme="light"] {
   color: var(--cfg);
   font: inherit;
 }
+/* classless gives every input a bottom margin, which pushes the box above the
+   row's centre line; this selector has to outrank its :not() chain. */
+.ws-toolbar input.ws-search {
+  margin: 0;
+}
 .ws-search:focus-visible {
   outline: 2px solid var(--cemph);
   outline-offset: 1px;
