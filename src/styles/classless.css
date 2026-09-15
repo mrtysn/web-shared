@@ -49,8 +49,8 @@ html[data-theme="light"] {
   --cmed: #d1d1d1;
   --cfield: #8e8e8e; /* a field's edge: 3.0:1 on --clight; #d1d1d1 was 1.4:1 */
   --clink: #0069b4; /* 5.3:1 on --clight; #07c was 4.3:1 on cards */
-  --cemph: #9b4dca;
-  --cemphbg: #9b4dca10;
+  --cemph: #9345c1; /* 5.0:1 on --cemphbg; #9b4dca was 4.497:1 there */
+  --cemphbg: #9345c110;
 }
 
 /* 2. Reset –––––––––––––––––––––––––––––––––––––––––––– */
