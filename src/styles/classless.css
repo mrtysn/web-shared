@@ -26,15 +26,19 @@ html[data-theme="dark"] {
   --font-c: 0.9em/1.4 "DejaVu Sans Mono", monospace;
   --border: 1px solid var(--cmed);
   --ornament: "‹‹‹ ›››";
-  /* foreground   | background color */
-  --cfg: #cecbc4;
+  /* foreground   | background color
+     Measured in WCAG 2 and in APCA on --cbg, --clight and a badge over --clight.
+     WCAG overrates light text on a dark ground, so these were lifted until APCA
+     agreed too; only lightness moved, never hue. */
+  --cfg: #dddad3; /* body text: Lc 78 on --clight, 82 on --cbg */
   --cbg: #252220;
-  --cdark: #b0b0b0; /* secondary text: 4.84:1 on a badge over --clight, the lowest ground it meets */
+  --cdark: #c5c5c5; /* secondary text: Lc 62+ everywhere, a clear step below --cfg */
   --clight: #333;
   --cmed: #566;
-  --clink: #1ad;
-  --cemph: #0b9;
-  --cemphbg: #0b91;
+  --cfield: #788a8a; /* a field's edge, its only outline: 3.5:1 on --clight */
+  --clink: #66d1ff; /* Lc 62+ even on a badge; #1ad was Lc 41-48 */
+  --cemph: #3dd5b2; /* Lc 62 on --clight; #0b9 was Lc 49 */
+  --cemphbg: #3dd5b218;
 }
 
 html[data-theme="light"] {
@@ -43,6 +47,7 @@ html[data-theme="light"] {
   --cdark: #666; /* secondary text: 4.9:1 on a badge over --clight, the lowest ground it meets */
   --clight: #f5f6f7;
   --cmed: #d1d1d1;
+  --cfield: #8e8e8e; /* a field's edge: 3.0:1 on --clight; #d1d1d1 was 1.4:1 */
   --clink: #0069b4; /* 5.3:1 on --clight; #07c was 4.3:1 on cards */
   --cemph: #9b4dca;
   --cemphbg: #9b4dca10;
@@ -572,7 +577,7 @@ button,
 select {
   font: var(--font-h);
   border-radius: 4px;
-  border: 1.5px solid var(--cmed);
+  border: 1.5px solid var(--cfield);
   padding: 0.4em 0.8em;
   color: var(--cfg);
   background-color: var(--clight);

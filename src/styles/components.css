@@ -116,7 +116,7 @@ html[data-theme="light"] {
   min-width: 180px;
   max-width: 360px;
   padding: 6px 10px;
-  border: 1px solid var(--cmed);
+  border: 1px solid var(--cfield);
   border-radius: 8px;
   background: var(--cbg);
   color: var(--cfg);
