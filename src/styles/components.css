@@ -12,8 +12,9 @@
 :root,
 html[data-theme="dark"] {
   --ws-rule: color-mix(in srgb, var(--cmed) 45%, transparent);
-  --ws-good: #4c9a72;
-  --ws-bad: #e07a5f;
+  /* Lifted to APCA Lc 62 on --clight; #4c9a72 and #e07a5f were Lc 35-44. */
+  --ws-good: #80cfa4;
+  --ws-bad: #ffa992;
   --ws-radius: 10px;
 }
 html[data-theme="light"] {
