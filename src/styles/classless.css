@@ -29,7 +29,7 @@ html[data-theme="dark"] {
   /* foreground   | background color */
   --cfg: #cecbc4;
   --cbg: #252220;
-  --cdark: #999;
+  --cdark: #b0b0b0; /* secondary text: 4.84:1 on a badge over --clight, the lowest ground it meets */
   --clight: #333;
   --cmed: #566;
   --clink: #1ad;
@@ -40,10 +40,10 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
   --cfg: #433;
   --cbg: #fff;
-  --cdark: #6b6b6b; /* secondary text: 5.3:1 on --cbg, 4.9:1 on --clight; #888 was 3.5:1 */
+  --cdark: #666; /* secondary text: 4.9:1 on a badge over --clight, the lowest ground it meets */
   --clight: #f5f6f7;
   --cmed: #d1d1d1;
-  --clink: #07c;
+  --clink: #0069b4; /* 5.3:1 on --clight; #07c was 4.3:1 on cards */
   --cemph: #9b4dca;
   --cemphbg: #9b4dca10;
 }
@@ -82,6 +82,13 @@ summary,
 input,
 select {
   outline: none;
+}
+/* Inputs get a focus border below; summary and select had no replacement, so a
+   keyboard user could not see where focus was. */
+summary:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--clink);
+  outline-offset: 2px;
 }
 
 /* reset clickable things  (FF Bug: select:hover prevents usage) */
