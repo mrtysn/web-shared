@@ -40,7 +40,7 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
   --cfg: #433;
   --cbg: #fff;
-  --cdark: #888;
+  --cdark: #6b6b6b; /* secondary text: 5.3:1 on --cbg, 4.9:1 on --clight; #888 was 3.5:1 */
   --clight: #f5f6f7;
   --cmed: #d1d1d1;
   --clink: #07c;
