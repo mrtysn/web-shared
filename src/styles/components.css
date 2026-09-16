@@ -112,9 +112,24 @@ html[data-theme="light"] {
   gap: 10px;
   flex-wrap: wrap;
 }
-.ws-search {
+/* The label rides with the box it names, and the pair takes the width the box
+   used to take on its own. */
+.ws-search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex: 1;
   min-width: 180px;
+  max-width: 420px;
+}
+.ws-search-label {
+  color: var(--cdark);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.ws-search {
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: 360px;
   padding: 6px 10px;
   border: 1px solid var(--cfield);
