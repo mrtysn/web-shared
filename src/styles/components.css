@@ -210,3 +210,90 @@ html[data-theme="light"] {
   letter-spacing: 0.6px;
   color: var(--cdark);
 }
+
+/* Document with a contents column: <body class="ws-doc"><nav class="ws-toc">…</nav><main>…</main></body>.
+   The nav sticks to the left while the page scrolls; below 55rem it becomes a block above the text. */
+body.ws-doc {
+  --ws-toc-width: 13rem;
+  max-width: calc(var(--ws-toc-width) + var(--width) + 3rem);
+  display: grid;
+  grid-template-columns: var(--ws-toc-width) minmax(0, 1fr);
+  column-gap: 2rem;
+  align-items: start;
+}
+body.ws-doc > nav.ws-toc {
+  position: sticky;
+  top: 1rem;
+  left: auto;
+  right: auto;
+  width: auto;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  background: none;
+  box-shadow: none;
+  border-right: 1px solid var(--ws-rule);
+  font: var(--font-h);
+}
+body.ws-doc > nav.ws-toc + * {
+  margin-top: 0;
+}
+.ws-toc ul {
+  margin: 0;
+  padding: 0;
+}
+.ws-toc ul:first-child > li {
+  display: block;
+  padding: 0.25rem 0;
+  white-space: normal;
+}
+.ws-toc a {
+  display: block;
+  color: var(--cdark);
+  text-decoration: none;
+}
+.ws-toc a:hover,
+.ws-toc a:focus-visible {
+  color: var(--clink);
+}
+.ws-toc a[aria-current="true"] {
+  color: var(--cfg);
+  font-weight: 700;
+  border-left: 2px solid var(--cemph);
+  margin-left: -0.8rem;
+  padding-left: calc(0.8rem - 2px);
+}
+.ws-toc-title {
+  margin: 0 0 0.4rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--cdark);
+}
+@media (max-width: 55rem) {
+  body.ws-doc {
+    display: block;
+    max-width: var(--width);
+  }
+  body.ws-doc > nav.ws-toc {
+    position: static;
+    max-height: none;
+    margin-bottom: 1.5rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--ws-rule);
+  }
+  .ws-toc a[aria-current="true"] {
+    margin-left: 0;
+    padding-left: 0.4rem;
+  }
+}
+@media print {
+  body.ws-doc {
+    display: block;
+    max-width: none;
+  }
+  body.ws-doc > nav.ws-toc {
+    display: none;
+  }
+}
