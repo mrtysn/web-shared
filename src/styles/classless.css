@@ -263,9 +263,10 @@ figure > svg:only-of-type {
 }
 /* A video that states its width and height keeps that shape and fits on one screen,
    so a portrait short shows whole instead of stretching to the column. The attributes
-   also reserve its box before anything loads. */
+   also reserve its box before anything loads. revert-layer drops the reset's 100% and
+   lets the width attribute set the width; auto would use the poster's own size. */
 video[width][height] {
-  width: auto;
+  width: revert-layer;
   height: auto;
   max-width: 100%;
   max-height: 85vh;
