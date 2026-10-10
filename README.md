@@ -39,3 +39,10 @@ Consumers: **atlas**, **mertyas.in**.
 
 This is a submodule, so bumping a consumer = `git submodule update --remote` in
 that repo and committing the new pointer.
+
+## Editing the house style
+
+Edit in a standalone clone (`git clone git@github.com:mrtysn/web-shared.git` beside the other
+repos), not inside a consumer's submodule. That clone is also what `project-lifecycle
+page-new` inlines into the pages agents write (its `web_shared_root` setting), so a change
+there reaches new pages at once and reaches each site when the site bumps its pointer.
