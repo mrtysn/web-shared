@@ -25,7 +25,7 @@ html[data-theme="dark"] {
     sans-serif;
   --font-c: 0.9em/1.4 "DejaVu Sans Mono", monospace;
   --border: 1px solid var(--cmed);
-  --ornament: "‹‹‹ ›››";
+  --ornament: none; /* what closes each section; a palette may set a string such as "‹‹‹ ›››" */
   /* foreground   | background color
      Measured in WCAG 2 and in APCA on --cbg, --clight and a badge over --clight.
      WCAG overrates light text on a dark ground, so these were lifted until APCA
