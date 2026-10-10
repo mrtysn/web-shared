@@ -354,6 +354,7 @@ figure:has(> figure) {
 figure > figure {
   display: inline-grid;
   width: auto;
+  max-width: calc(50% - 0.5rem); /* at least two to a row, however narrow the screen */
   vertical-align: top;
   text-align: left;
 }
@@ -361,8 +362,13 @@ figure > figure {
 figure > figure > figcaption {
   contain: inline-size;
 }
-figure > figure:not(:last-of-type) {
-  padding-right: 1rem;
+/* Even gutters on both sides, so two subfigures in a row get the same width. */
+figure > figure {
+  padding: 0 0.5rem;
+}
+/* A video in a row of subfigures stays short enough to see the row at once. */
+figure > figure > video[width][height] {
+  max-height: 60vh;
 }
 /* An image that states its size keeps its shape when max-width narrows it. */
 img[width][height] {
