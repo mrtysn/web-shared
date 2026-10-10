@@ -297,3 +297,128 @@ body.ws-doc > nav.ws-toc + * {
     display: none;
   }
 }
+
+/* Decision form (project-lifecycle page-new --mode decision-form): each question is a
+   <section data-question> with a .ws-options fieldset of .ws-option cards, a .ws-other text box
+   and a .ws-skip box; the summary table and a submit bar pinned to the window's bottom close it. */
+.ws-options {
+  display: grid;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 1rem 0 0.8rem;
+}
+.ws-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 13px;
+  border: 1px solid var(--ws-rule);
+  border-radius: var(--ws-radius);
+  background: var(--clight);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.ws-option:hover {
+  border-color: var(--cmed);
+}
+.ws-option:has(input:checked) {
+  border-color: var(--cemph);
+  background: var(--cemphbg);
+}
+.ws-option:has(input:focus-visible) {
+  outline: 2px solid var(--cemph);
+  outline-offset: 1px;
+}
+.ws-option input {
+  margin: 0.3em 0 0;
+  flex: none;
+  accent-color: var(--cemph);
+}
+.ws-option__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  min-width: 0;
+}
+.ws-option__label {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.ws-option__recommended {
+  font-size: 0.68rem;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--cemph);
+  color: var(--cbg);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ws-option__consequence {
+  flex-basis: 100%;
+  font-size: 0.9rem;
+  color: var(--cdark);
+}
+.ws-other {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--cdark);
+}
+.ws-other textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  resize: vertical;
+}
+.ws-skip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--cdark);
+  cursor: pointer;
+}
+.ws-decision-summary {
+  width: 100%;
+}
+.ws-decision-summary th,
+.ws-decision-summary td {
+  text-align: left;
+  vertical-align: top;
+}
+.ws-decision-summary .ws-unanswered td:last-child {
+  color: var(--cdark);
+  font-style: italic;
+}
+.ws-decision-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 1.5rem;
+  padding: 10px 0;
+  background: var(--cbg);
+  border-top: 1px solid var(--ws-rule);
+}
+.ws-decision-bar button {
+  margin: 0;
+}
+.ws-decision-status {
+  color: var(--cdark);
+  font-size: 0.85rem;
+}
+.ws-answer-copy textarea {
+  display: block;
+  width: 100%;
+  font: var(--font-c);
+}
+@media print {
+  .ws-decision-bar {
+    display: none;
+  }
+}
