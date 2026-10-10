@@ -46,3 +46,10 @@ Edit in a standalone clone (`git clone git@github.com:mrtysn/web-shared.git` bes
 repos), not inside a consumer's submodule. That clone is also what `project-lifecycle
 page-new` inlines into the pages agents write (its `web_shared_root` setting), so a change
 there reaches new pages at once and reaches each site when the site bumps its pointer.
+
+## Palettes
+
+`src/styles/palettes/<name>.css` recolours the house style for one page: custom properties
+only (`--cbg`, `--cfg`, `--clink`, `--cemph`, the `--ws-tone-N` category colours, `--font-p`),
+on `html[data-theme="light"]` and `html[data-theme="dark"]`. `project-lifecycle page-new
+--palette <name>` lays one over the stylesheets; a repo can keep its own as `page-palette.css`.

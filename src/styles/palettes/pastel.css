@@ -1,0 +1,28 @@
+/* pastel: peach paper, brown ink, terracotta emphasis, rounded type. Tokens only; page-new --palette pastel. */
+html[data-theme="light"],
+html[data-theme="dark"] {
+  --font-p: 1em/1.65 ui-rounded, "Nunito", "Avenir Next", system-ui, sans-serif;
+  --font-h: 0.9em/1.5 ui-rounded, "Nunito", "Avenir Next", system-ui, sans-serif;
+}
+html[data-theme="light"] {
+  --cbg: #fdf8f3;
+  --clight: #fffdfb;
+  --cfg: #3b332e;
+  --cdark: #6c5e55;
+  --cmed: #e7ddd4;
+  --cfield: #a5968a;
+  --clink: #a8431f;
+  --cemph: #c4532f;
+  --cemphbg: #d9603c14;
+}
+html[data-theme="dark"] {
+  --cbg: #1e1916;
+  --clight: #29221e;
+  --cfg: #f1e7df;
+  --cdark: #c7b7aa;
+  --cmed: #4a3e36;
+  --cfield: #7f6d61;
+  --clink: #ffab8e;
+  --cemph: #ff9f7f;
+  --cemphbg: #ff9f7f1f;
+}

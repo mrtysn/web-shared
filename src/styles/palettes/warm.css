@@ -1,0 +1,23 @@
+/* warm: cream paper, near-black ink, violet emphasis. Tokens only; page-new --palette warm. */
+html[data-theme="light"] {
+  --cbg: #f7f5f0;
+  --clight: #ffffff;
+  --cfg: #1c1b19;
+  --cdark: #625f57;
+  --cmed: #e2ddd1;
+  --cfield: #948f84;
+  --clink: #5b34a8;
+  --cemph: #6d3fc0;
+  --cemphbg: #6d3fc014;
+}
+html[data-theme="dark"] {
+  --cbg: #141312;
+  --clight: #1d1c1a;
+  --cfg: #ecebe6;
+  --cdark: #b3b0a7;
+  --cmed: #3a3732;
+  --cfield: #77736b;
+  --clink: #c0a6f5;
+  --cemph: #b294f0;
+  --cemphbg: #b294f01f;
+}
