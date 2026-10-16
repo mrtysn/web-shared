@@ -964,6 +964,14 @@ body.ws-deck > main > section ul,
 body.ws-deck > main > section ol {
   margin: 0.4em 0;
 }
+body.ws-deck > main > section table {
+  display: table;
+  width: 100%;
+}
+body.ws-deck > main > section th,
+body.ws-deck > main > section td {
+  text-align: left;
+}
 body.ws-deck > main > section figure > img,
 body.ws-deck > main > section figure > svg {
   max-height: 60%;
