@@ -893,3 +893,208 @@ article.ws-card h3::before {
 .ws-steps figure img {
   margin-left: 0;
 }
+
+/* Deck: a page presented one slide at a time, written by `page-new --mode deck`.
+   <body class="ws-deck"><main><section class="ws-title-slide"><h1>…</h1></section>
+   <section id="…"><h2>…</h2>…<div class="ws-notes">speaker notes</div></section>…</main></body>
+   Without script every slide shows, stacked, and prints one to a page. The deck's script adds
+   .ws-deck--live to the body and marks the slide on show with data-current. The stage is 16:9 and
+   scales with the window: the root font size is a fraction of the stage width, so every rem and em
+   inside it scales with it. */
+html:has(body.ws-deck) {
+  --ws-stage-width: min(100vw, calc(100vh * 16 / 9));
+  font-size: calc(var(--ws-stage-width) / 56);
+  background: var(--clight);
+}
+body.ws-deck {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+body.ws-deck > main {
+  position: relative;
+  width: var(--ws-stage-width);
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  background: var(--cbg);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+body.ws-deck > main > section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: 4% 7%;
+  border-bottom: var(--border);
+}
+body.ws-deck.ws-deck--live > main {
+  height: calc(var(--ws-stage-width) * 9 / 16);
+  margin-top: calc((100vh - var(--ws-stage-width) * 9 / 16) / 2);
+}
+body.ws-deck.ws-deck--live > main > section {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  border-bottom: 0;
+}
+body.ws-deck.ws-deck--live > main > section:not([data-current]) {
+  display: none;
+}
+body.ws-deck > main > section > h1,
+body.ws-deck > main > section > h2 {
+  margin: 0 0 0.6em;
+  font-size: 2.4em;
+  font-variant: normal;
+  line-height: 1.15;
+}
+body.ws-deck > main > section.ws-title-slide > h1 {
+  font-size: 3.4em;
+  font-weight: 600;
+}
+body.ws-deck > main > section p,
+body.ws-deck > main > section li,
+body.ws-deck > main > section td,
+body.ws-deck > main > section th {
+  font-size: 1.15em;
+}
+body.ws-deck > main > section ul,
+body.ws-deck > main > section ol {
+  margin: 0.4em 0;
+}
+body.ws-deck > main > section figure > img,
+body.ws-deck > main > section figure > svg {
+  max-height: 60%;
+  width: auto;
+  max-width: 100%;
+}
+body.ws-deck > main > section .ws-stat__value {
+  font-size: 2.6em;
+}
+body.ws-deck > main > section .ws-stat__label {
+  font-size: 0.9em;
+}
+body.ws-deck > main > section .ws-subtitle {
+  margin: 0;
+  font-size: 1.4em;
+  color: var(--cdark);
+}
+.ws-notes {
+  display: none;
+}
+.ws-deck__bar {
+  position: fixed;
+  right: 0.8rem;
+  bottom: 0.6rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}
+.ws-deck__bar:hover,
+.ws-deck__bar:focus-within {
+  opacity: 1;
+}
+.ws-deck__bar button {
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  margin: 0;
+  padding: 0 0.6rem;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--cfg);
+  background: var(--clight);
+  border: var(--border);
+  border-radius: 0.4rem;
+}
+.ws-deck__bar button[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+.ws-deck__count {
+  min-width: 3.6rem;
+  font-size: 0.9rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--cdark);
+}
+.ws-deck__notes {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  max-height: 40vh;
+  overflow: auto;
+  padding: 0.8rem 1.2rem 3rem;
+  font-size: 0.9rem;
+  color: var(--cfg);
+  background: var(--clight);
+  border-top: var(--border);
+  user-select: text;
+}
+.ws-deck__notes[hidden] {
+  display: none;
+}
+.ws-deck__next {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cdark);
+}
+/* A portrait screen (a phone held upright) gets a stage that fills it, not a 16:9 strip. */
+@media (max-aspect-ratio: 1 / 1) {
+  html:has(body.ws-deck) {
+    --ws-stage-width: 100vw;
+    font-size: calc(100vw / 24);
+  }
+  body.ws-deck > main,
+  body.ws-deck.ws-deck--live > main {
+    aspect-ratio: auto;
+    height: 100vh;
+    margin-top: 0;
+  }
+}
+@media print {
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+  html:has(body.ws-deck) {
+    font-size: 15pt !important;
+    background: var(--cbg);
+  }
+  body.ws-deck {
+    max-width: none;
+    overflow: visible;
+  }
+  body.ws-deck > main,
+  body.ws-deck.ws-deck--live > main {
+    width: auto;
+    height: auto;
+    aspect-ratio: auto;
+    margin: 0;
+  }
+  body.ws-deck > main > section,
+  body.ws-deck.ws-deck--live > main > section,
+  body.ws-deck.ws-deck--live > main > section:not([data-current]) {
+    position: relative;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+    border: 0;
+    break-after: page;
+    page-break-after: always;
+  }
+  .ws-deck__bar,
+  .ws-deck__notes {
+    display: none;
+  }
+}
