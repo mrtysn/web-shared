@@ -1034,6 +1034,12 @@ body.ws-deck > main > section .ws-subtitle {
   font-size: 1.4em;
   color: var(--cdark);
 }
+body.ws-deck > main > section .ws-kicker:empty {
+  display: none;
+}
+body.ws-deck > main > section .ws-kicker:not(:empty) + h2::before {
+  display: none;
+}
 body.ws-deck > main > section .ws-kicker {
   margin: 0 0 0.5em;
   font-size: 0.85em;
@@ -1043,7 +1049,8 @@ body.ws-deck > main > section .ws-kicker {
   color: var(--ws-accent, var(--cemph));
 }
 /* Slide layouts: the class on the <section> picks the composition. A plain slide is a heading and
-   a short list. stat: one big number; split: two columns; figure: one picture; quote: one line. */
+   a short list. stat: one big number; split: two columns; art: text beside a picture; figure: one
+   picture; quote: one line. A ws-ground--soft or --accent class changes the slide's ground. */
 body.ws-deck > main > section.ws-slide--stat {
   justify-content: center;
 }
@@ -1082,6 +1089,40 @@ body.ws-deck > main > section.ws-slide--figure {
 }
 body.ws-deck > main > section.ws-slide--figure > h2 {
   align-self: flex-start;
+}
+body.ws-deck > main > section.ws-slide--art .ws-cols {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 6%;
+  align-items: center;
+}
+body.ws-deck > main > section.ws-slide--art figure > img,
+body.ws-deck > main > section.ws-slide--art figure > svg {
+  max-height: 22em;
+  border-radius: 0.6em;
+}
+/* A slide's ground: soft is the lifted panel colour, accent fills the slide with the accent. */
+body.ws-deck > main > section.ws-ground--soft {
+  background: var(--clight);
+}
+body.ws-deck > main > section.ws-ground--accent {
+  color: var(--cbg);
+  background: var(--ws-accent, var(--cemph));
+}
+body.ws-deck > main > section.ws-ground--accent h1,
+body.ws-deck > main > section.ws-ground--accent h2,
+body.ws-deck > main > section.ws-ground--accent .ws-stat__value,
+body.ws-deck > main > section.ws-ground--accent .ws-stat__label,
+body.ws-deck > main > section.ws-ground--accent .ws-kicker,
+body.ws-deck > main > section.ws-ground--accent .ws-cols h3,
+body.ws-deck > main > section.ws-ground--accent figcaption {
+  color: var(--cbg);
+}
+body.ws-deck > main > section.ws-ground--accent h2::before {
+  background: var(--cbg);
+}
+body.ws-deck > main > section.ws-ground--accent li::marker {
+  color: var(--cbg);
 }
 body.ws-deck > main > section.ws-slide--quote {
   background: var(--clight);
@@ -1147,6 +1188,9 @@ body.ws-deck > main > section.ws-slide--quote cite {
 }
 .ws-deck__count {
   min-width: 3.6rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--clight);
+  border-radius: 0.4rem;
   font-size: 0.9rem;
   text-align: center;
   font-variant-numeric: tabular-nums;
@@ -1183,7 +1227,8 @@ body.ws-deck > main > section.ws-slide--quote cite {
     --ws-stage-width: 100vw;
     font-size: calc(100vw / 24);
   }
-  body.ws-deck > main > section.ws-slide--split .ws-cols {
+  body.ws-deck > main > section.ws-slide--split .ws-cols,
+  body.ws-deck > main > section.ws-slide--art .ws-cols {
     grid-template-columns: 1fr;
     gap: 1em;
   }
