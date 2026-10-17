@@ -1084,6 +1084,14 @@ body.ws-deck > main > section.ws-slide--split .ws-cols h3 {
 body.ws-deck > main > section.ws-slide--split .ws-cols ul {
   padding-left: 1.1em;
 }
+/* classless.css keeps table cells on one line; on a slide a long cell must wrap, not run off */
+body.ws-deck > main > section td,
+body.ws-deck > main > section th {
+  white-space: normal;
+  text-align: left;
+  font-size: 80%;
+  padding: 0.35em 0.8em;
+}
 body.ws-deck > main > section.ws-slide--figure {
   align-items: center;
 }
