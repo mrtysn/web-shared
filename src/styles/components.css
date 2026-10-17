@@ -900,7 +900,8 @@ article.ws-card h3::before {
    Without script every slide shows, stacked, and prints one to a page. The deck's script adds
    .ws-deck--live to the body and marks the slide on show with data-current. The stage is 16:9 and
    scales with the window: the root font size is a fraction of the stage width, so every rem and em
-   inside it scales with it. */
+   inside it scales with it. --ws-accent (default --cemph) colours the rules, markers and big
+   numbers; --ws-deck-font-h and --ws-deck-font-p replace the serif and sans system stacks. */
 html:has(body.ws-deck) {
   --ws-stage-width: min(100vw, calc(100vh * 16 / 9));
   font-size: calc(var(--ws-stage-width) / 56);
@@ -946,23 +947,53 @@ body.ws-deck.ws-deck--live > main > section:not([data-current]) {
 body.ws-deck > main > section > h1,
 body.ws-deck > main > section > h2 {
   margin: 0 0 0.6em;
-  font-size: 2.4em;
+  font-family: var(--ws-deck-font-h, ui-serif, "New York", Charter, "Iowan Old Style", Georgia, serif);
+  font-size: 2.3em;
+  font-weight: 700;
   font-variant: normal;
-  line-height: 1.15;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+}
+body.ws-deck > main > section > h2::before {
+  content: "";
+  display: block;
+  width: 2.2rem;
+  height: 0.28rem;
+  margin-bottom: 0.7rem;
+  background: var(--ws-accent, var(--cemph));
+}
+body.ws-deck > main > section {
+  font-family: var(--ws-deck-font-p, ui-sans-serif, -apple-system, "SF Pro Text", "Segoe UI", system-ui, sans-serif);
+}
+body.ws-deck > main > section.ws-title-slide {
+  padding-left: 9%;
+  background: var(--clight);
+  box-shadow: inset 0.7rem 0 0 var(--ws-accent, var(--cemph));
 }
 body.ws-deck > main > section.ws-title-slide > h1 {
-  font-size: 3.4em;
-  font-weight: 600;
+  max-width: 13em;
+  font-size: 3.9em;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
 }
 body.ws-deck > main > section p,
 body.ws-deck > main > section li,
 body.ws-deck > main > section td,
 body.ws-deck > main > section th {
-  font-size: 1.15em;
+  font-size: 1.2em;
+  line-height: 1.5;
 }
 body.ws-deck > main > section ul,
 body.ws-deck > main > section ol {
+  max-width: 32em;
   margin: 0.4em 0;
+  padding-left: 1.2em;
+}
+body.ws-deck > main > section li {
+  margin: 0.45em 0;
+}
+body.ws-deck > main > section li::marker {
+  color: var(--ws-accent, var(--cemph));
 }
 body.ws-deck > main > section table {
   display: table;
@@ -972,21 +1003,112 @@ body.ws-deck > main > section th,
 body.ws-deck > main > section td {
   text-align: left;
 }
+body.ws-deck > main > section figure {
+  margin: 0;
+  text-align: center;
+}
 body.ws-deck > main > section figure > img,
 body.ws-deck > main > section figure > svg {
   max-height: 60%;
   width: auto;
   max-width: 100%;
 }
+body.ws-deck > main > section figcaption {
+  margin-top: 0.6em;
+  font-size: 0.9em;
+  color: var(--cdark);
+}
+body.ws-deck > main > section .ws-stat {
+  display: block;
+}
 body.ws-deck > main > section .ws-stat__value {
+  display: block;
   font-size: 2.6em;
 }
 body.ws-deck > main > section .ws-stat__label {
+  display: block;
   font-size: 0.9em;
 }
 body.ws-deck > main > section .ws-subtitle {
-  margin: 0;
+  margin: 0.6em 0 0;
   font-size: 1.4em;
+  color: var(--cdark);
+}
+body.ws-deck > main > section .ws-kicker {
+  margin: 0 0 0.5em;
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ws-accent, var(--cemph));
+}
+/* Slide layouts: the class on the <section> picks the composition. A plain slide is a heading and
+   a short list. stat: one big number; split: two columns; figure: one picture; quote: one line. */
+body.ws-deck > main > section.ws-slide--stat {
+  justify-content: center;
+}
+body.ws-deck > main > section.ws-slide--stat .ws-stat__value {
+  font-family: var(--ws-deck-font-h, ui-serif, "New York", Charter, "Iowan Old Style", Georgia, serif);
+  font-size: 8em;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ws-accent, var(--cemph));
+}
+body.ws-deck > main > section.ws-slide--stat .ws-stat__label {
+  max-width: 24em;
+  margin-top: 0.4em;
+  font-size: 1.5em;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--cfg);
+}
+body.ws-deck > main > section.ws-slide--split .ws-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5%;
+}
+body.ws-deck > main > section.ws-slide--split .ws-cols h3 {
+  margin: 0 0 0.4em;
+  font-size: 1.1em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ws-accent, var(--cemph));
+}
+body.ws-deck > main > section.ws-slide--split .ws-cols ul {
+  padding-left: 1.1em;
+}
+body.ws-deck > main > section.ws-slide--figure {
+  align-items: center;
+}
+body.ws-deck > main > section.ws-slide--figure > h2 {
+  align-self: flex-start;
+}
+body.ws-deck > main > section.ws-slide--quote {
+  background: var(--clight);
+}
+body.ws-deck > main > section.ws-slide--quote > h2 {
+  display: none;
+}
+body.ws-deck > main > section.ws-slide--quote blockquote {
+  max-width: 20em;
+  margin: 0;
+  padding: 0 0 0 1.2em;
+  font-family: var(--ws-deck-font-h, ui-serif, "New York", Charter, "Iowan Old Style", Georgia, serif);
+  font-size: 2.2em;
+  font-style: italic;
+  line-height: 1.25;
+  border-left: 0.35rem solid var(--ws-accent, var(--cemph));
+}
+body.ws-deck > main > section.ws-slide--quote blockquote p {
+  font-size: 1em;
+}
+body.ws-deck > main > section.ws-slide--quote cite {
+  display: block;
+  margin-top: 0.7em;
+  font-size: 0.4em;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--cdark);
 }
 .ws-notes {
@@ -1060,6 +1182,13 @@ body.ws-deck > main > section .ws-subtitle {
   html:has(body.ws-deck) {
     --ws-stage-width: 100vw;
     font-size: calc(100vw / 24);
+  }
+  body.ws-deck > main > section.ws-slide--split .ws-cols {
+    grid-template-columns: 1fr;
+    gap: 1em;
+  }
+  body.ws-deck > main > section.ws-slide--stat .ws-stat__value {
+    font-size: 5em;
   }
   body.ws-deck > main,
   body.ws-deck.ws-deck--live > main {
