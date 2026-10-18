@@ -699,6 +699,100 @@ body.ws-wide {
   }
 }
 
+/* Day board (card-board, schedule): what leaves when. <div class="ws-slots"> of
+   <div class="ws-slot" data-band><span class="ws-slot__label">06–09 <em>morning</em></span>
+   <ol><li class="ws-slot__item" data-tone="4" data-pick><time>08:30</time>
+   <span class="ws-slot__value">₺3,118</span><span class="ws-slot__who">Pegasus</span>
+   <span class="ws-slot__flag">pick</span></li></ol></div>. One slot per interval of the day,
+   --ws-slots of them (8 three-hour slots by default); data-band shades the slots the reader asked
+   about, data-pick rings the chosen item, and the tone is the carrier (an airline, a venue). */
+.ws-slots {
+  display: grid;
+  grid-template-columns: repeat(var(--ws-slots, 8), minmax(0, 1fr));
+  gap: 6px;
+  margin: 1rem 0 1.5rem;
+}
+.ws-slot {
+  min-width: 0;
+  padding: 6px 0 4px;
+  border-top: 2px solid var(--ws-rule);
+}
+.ws-slot[data-band] {
+  border-top-color: var(--cemph);
+  background: var(--cemphbg);
+  border-radius: 0 0 6px 6px;
+}
+.ws-slot__label {
+  display: block;
+  margin: 0 0 6px;
+  padding: 0 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cdark);
+  font-variant-numeric: tabular-nums;
+}
+.ws-slot__label em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--cemph);
+}
+.ws-slot > ol {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px;
+  display: grid;
+  gap: 4px;
+}
+.ws-slot__item {
+  --ws-tone: var(--cmed);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 4px;
+  align-items: baseline;
+  padding: 4px 6px 4px 8px;
+  border-left: 3px solid var(--ws-tone);
+  border-radius: 4px;
+  background: var(--clight);
+  font-size: 0.8rem;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+.ws-slot__item > time {
+  font-weight: 600;
+}
+.ws-slot__value {
+  grid-column: 1 / -1;
+}
+.ws-slot__who {
+  grid-column: 1 / -1;
+  font-size: 0.68rem;
+  color: var(--cdark);
+}
+.ws-slot__flag {
+  grid-row: 1;
+  grid-column: 2;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cemph);
+}
+.ws-slot__item[data-pick] {
+  outline: 2px solid var(--cemph);
+  outline-offset: -2px;
+  background: var(--cemphbg);
+}
+@media (max-width: 720px) {
+  .ws-slots {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 400px) {
+  .ws-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* Gallery: <div class="ws-gallery"> of <figure data-tags="…"><img><figcaption></figure>. */
 .ws-gallery {
   display: grid;
