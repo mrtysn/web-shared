@@ -867,6 +867,116 @@ body.ws-wide {
   font-size: 0.9rem;
 }
 
+/* Progress (progress): <ul class="ws-progress"><li data-state="waiting|running|stalled|stale|done|failed">
+   <div class="ws-progress__head"><span class="ws-progress__name">…</span><span class="ws-progress__figures">…</span></div>
+   <div class="ws-progress__track" style="--value: 42%"></div><p class="ws-progress__note">…</p></li></ul>.
+   A track with no --value and data-indeterminate is work whose total is not known yet.
+   ws-progress__total on the li is the overall row, drawn heavier. */
+.ws-progress {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  display: grid;
+  gap: 6px;
+}
+.ws-progress > li {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 4px 12px;
+  align-items: center;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--ws-rule);
+  border-radius: var(--ws-radius);
+  background: var(--clight);
+  --ws-state: var(--clink);
+}
+.ws-progress > li::before {
+  content: attr(data-state);
+  grid-row: span 3;
+  align-self: start;
+  justify-self: start;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 1px 7px;
+  border-radius: 4px;
+  color: var(--ws-state);
+  background: color-mix(in srgb, var(--ws-state) 15%, transparent);
+}
+.ws-progress > li[data-state="waiting"] { --ws-state: var(--cdark); }
+.ws-progress > li[data-state="stalled"],
+.ws-progress > li[data-state="stale"] { --ws-state: var(--cemph); }
+.ws-progress > li[data-state="done"] { --ws-state: var(--ws-good); }
+.ws-progress > li[data-state="failed"] { --ws-state: var(--ws-bad); }
+.ws-progress__head {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+  min-width: 0;
+}
+.ws-progress__name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.ws-progress__figures {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--cdark);
+}
+.ws-progress__track {
+  grid-column: 2;
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--cmed) 30%, transparent);
+  overflow: hidden;
+}
+.ws-progress__track::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--value, 0%);
+  border-radius: inherit;
+  background: var(--ws-state);
+  transition: width 0.6s ease;
+}
+.ws-progress__track[data-indeterminate]::before {
+  width: 30%;
+  animation: ws-progress-sweep 1.6s ease-in-out infinite alternate;
+}
+@keyframes ws-progress-sweep {
+  from { left: 0; }
+  to { left: 70%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-progress__track::before { transition: none; }
+  .ws-progress__track[data-indeterminate]::before { animation: none; width: 100%; opacity: 0.35; }
+}
+.ws-progress__note {
+  grid-column: 2;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--cdark);
+}
+.ws-progress__note:empty {
+  display: none;
+}
+.ws-progress > li.ws-progress__total {
+  padding: 12px 14px;
+  border-width: 2px;
+}
+.ws-progress > li.ws-progress__total .ws-progress__name {
+  font-size: 1.1rem;
+}
+.ws-progress > li.ws-progress__total .ws-progress__track {
+  height: 14px;
+  border-radius: 7px;
+}
+
 /* Links (link-collection): <ul class="ws-links"><li><a href>…</a><span class="ws-links__note">…</span></li></ul>. */
 .ws-links {
   list-style: none;
