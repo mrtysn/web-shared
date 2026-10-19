@@ -1085,6 +1085,13 @@ article.ws-card h3::before {
 .ws-filters .ws-chip--active {
   font-weight: 600;
 }
+/* A table whose last column is a sentence: <table class="ws-table--wrap">. Cells wrap and read
+   from the left; the plain table keeps its one-line, right-aligned cells for numbers. */
+.ws-table--wrap td,
+.ws-table--wrap th {
+  white-space: normal;
+  text-align: start;
+}
 /* A word before the chips saying what they choose: <span class="ws-filters__label">Fares captured on</span>. */
 .ws-filters__label {
   font-size: 0.78rem;
