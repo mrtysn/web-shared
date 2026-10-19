@@ -1085,6 +1085,13 @@ article.ws-card h3::before {
 .ws-filters .ws-chip--active {
   font-weight: 600;
 }
+/* A word before the chips saying what they choose: <span class="ws-filters__label">Fares captured on</span>. */
+.ws-filters__label {
+  font-size: 0.78rem;
+  color: var(--cdark);
+  align-self: center;
+  margin-right: 4px;
+}
 /* A step's picture supports the step; it does not fill the column. */
 .ws-steps figure img {
   max-height: 22rem;
