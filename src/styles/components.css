@@ -97,7 +97,7 @@ html[data-theme="light"] {
 /* Demoted from a bordered uppercase box: a badge sits beside a title, so it
    has to be readable without competing with it. */
 .ws-badge {
-  font-size: 0.68rem;
+  font-size: 0.75rem; /* 12px: the floor for legible text */
   letter-spacing: 0.2px;
   padding: 0 5px;
   border-radius: 4px;
