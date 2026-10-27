@@ -1,5 +1,5 @@
 /* Font picker: a floating menu on every page that swaps --font-p and --font-h for a system font and
-   remembers the choice. page-new inlines this file in the <head>, after the stylesheet. */
+   remembers the choice. page-vendor appends this file to page.js. */
 (function () {
   var KEY = "ws-font";
   var CHOICES = [
