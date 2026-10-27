@@ -13,9 +13,11 @@ projects. Consumed as a **git submodule**, not an npm install.
   page-new` writes such a page.
 - `src/styles/house-font.css` + `src/fonts/` — Ubuntu (300, 400, 700) as the default `--font-p`/`--font-h`,
   self-hosted; `page-new` inlines the files as data URIs. A palette's own `--font-p` wins over it.
+- `src/page.js` — the runtime every page needs: theme from the reader's preference, links in a new tab,
+  contents highlight.
 - `src/font-picker.js` — a floating menu (`.ws-fontpick`) that swaps those two properties for a system
-  font and remembers the choice in `localStorage`. `page-new` and `page-restyle` inline it in the
-  `<head>`; deck pages get no menu.
+  font and remembers the choice in `localStorage`. `page-vendor` appends it to `page.js`; deck pages get
+  no menu.
 - `src/components/` — domain-agnostic primitives: `Card`, `Grid`, `Toolbar`,
   `Stats`, `Tag`, `Badge`.
 - `tsconfig.base.json` — shared TypeScript defaults for consumer apps to extend.
@@ -51,6 +53,13 @@ Edit in a standalone clone (`git clone git@github.com:mrtysn/web-shared.git` bes
 repos), not inside a consumer's submodule. That clone is also what `project-lifecycle
 page-new` inlines into the pages agents write (its `web_shared_root` setting), so a change
 there reaches new pages at once and reaches each site when the site bumps its pointer.
+
+## How agent-written pages get this
+
+`project-lifecycle page-vendor` writes `ws/page.css` (the stylesheets above, fonts as data URIs) and
+`ws/page.js` (`page.js` then `font-picker.js`) at the root of each repo that holds pages; the pages link
+them by a relative path and keep only their content and palette. A style change here reaches a repo
+when `page-restyle` or `page-new` next refreshes its `ws/`.
 
 ## Palettes
 
