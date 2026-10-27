@@ -1477,9 +1477,12 @@ body.ws-deck > main > section.ws-slide--quote cite {
   }
 }
 @media print {
-  @page {
+  @page deck {
     size: landscape;
     margin: 0;
+  }
+  body.ws-deck {
+    page: deck;
   }
   html:has(body.ws-deck) {
     font-size: 15pt !important;
