@@ -1,0 +1,28 @@
+/* house font: Ubuntu, self-hosted so a page reads the same offline and on any machine.
+   page-new inlines the files below as data URIs; a palette may set its own --font-p/--font-h. */
+@font-face {
+  font-family: "Ubuntu";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/ubuntu-300.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ubuntu";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/ubuntu-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ubuntu";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/ubuntu-700.woff2") format("woff2");
+}
+:root,
+html[data-theme="dark"] {
+  --font-p: 1em/1.7 "Ubuntu", system-ui, sans-serif;
+  --font-h: 0.9em/1.5 "Ubuntu", system-ui, sans-serif;
+}

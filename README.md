@@ -11,6 +11,11 @@ projects. Consumed as a **git submodule**, not an npm install.
   `<body class="ws-doc"><nav class="ws-toc">…</nav><main>…</main></body>` puts a sticky contents
   column on the left (stacked above the text under 55rem, hidden in print). `project-lifecycle
   page-new` writes such a page.
+- `src/styles/house-font.css` + `src/fonts/` — Ubuntu (300, 400, 700) as the default `--font-p`/`--font-h`,
+  self-hosted; `page-new` inlines the files as data URIs. A palette's own `--font-p` wins over it.
+- `src/font-picker.js` — a floating menu (`.ws-fontpick`) that swaps those two properties for a system
+  font and remembers the choice in `localStorage`. `page-new` and `page-restyle` inline it in the
+  `<head>`; deck pages get no menu.
 - `src/components/` — domain-agnostic primitives: `Card`, `Grid`, `Toolbar`,
   `Stats`, `Tag`, `Badge`.
 - `tsconfig.base.json` — shared TypeScript defaults for consumer apps to extend.

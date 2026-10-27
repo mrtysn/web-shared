@@ -1514,3 +1514,40 @@ body.ws-deck > main > section.ws-slide--quote cite {
     display: none;
   }
 }
+
+/* The font picker that src/font-picker.js adds as the first child of <body>. */
+.ws-fontpick {
+  position: fixed;
+  top: 0.5rem;
+  right: 0.75rem;
+  z-index: 20;
+  padding: 0.15rem 0.5rem;
+  border: var(--border);
+  border-radius: 0.4rem;
+  background: var(--clight);
+  color: var(--cdark);
+  font: 12px/1.4 system-ui, sans-serif;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+.ws-fontpick:hover,
+.ws-fontpick:focus-within {
+  opacity: 1;
+}
+.ws-fontpick select {
+  margin-left: 0.25rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+@media (max-width: 40rem) {
+  .ws-fontpick {
+    display: none;
+  }
+}
+@media print {
+  .ws-fontpick {
+    display: none;
+  }
+}
