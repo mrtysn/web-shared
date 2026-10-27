@@ -1350,8 +1350,16 @@ body.ws-deck > main > section.ws-ground--accent h2::before {
 body.ws-deck > main > section.ws-ground--accent li::marker {
   color: var(--cbg);
 }
-body.ws-deck > main > section.ws-slide--quote {
+body.ws-deck > main > section.ws-slide--quote:not(.ws-ground--accent) {
   background: var(--clight);
+}
+body.ws-deck > main > section.ws-slide--quote.ws-ground--accent blockquote,
+body.ws-deck > main > section.ws-slide--quote.ws-ground--accent blockquote p,
+body.ws-deck > main > section.ws-slide--quote.ws-ground--accent cite {
+  color: var(--cbg);
+}
+body.ws-deck > main > section.ws-slide--quote.ws-ground--accent blockquote {
+  border-left-color: var(--cbg);
 }
 body.ws-deck > main > section.ws-slide--quote > h2 {
   display: none;
