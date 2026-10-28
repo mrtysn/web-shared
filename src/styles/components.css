@@ -653,7 +653,59 @@ body.ws-wide {
 /* One card per row, in reading order: text meant to be read top to bottom. */
 .ws-board--stack {
   columns: 1;
-  max-width: 46rem;
+  max-width: 60rem;
+}
+
+/* Current beside proposed, inside a card:
+   <div class="ws-compare"><div class="ws-compare__side" data-side="current"><p class="ws-compare__label">Current</p>…</div>
+   <div class="ws-compare__side" data-side="proposed">…</div></div><p class="ws-compare__note">…</p>.
+   The two sides stack when the card is too narrow to hold both. */
+.ws-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 0.6rem;
+}
+@media (max-width: 44rem) {
+  .ws-compare {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.ws-compare__side {
+  padding: 10px 12px;
+  border: 1px solid var(--ws-rule);
+  border-radius: var(--ws-radius);
+  background: var(--cbg);
+}
+.ws-compare__side[data-side="proposed"] {
+  border-color: var(--cemph);
+}
+.ws-compare__label {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cdark);
+}
+.ws-compare__side[data-side="proposed"] .ws-compare__label {
+  color: var(--cemph);
+}
+.ws-compare__side > :last-child {
+  margin-bottom: 0;
+}
+.ws-compare__side img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.ws-compare__none {
+  color: var(--cdark);
+  font-style: italic;
+}
+.ws-compare__note {
+  margin: 0.6rem 0 0;
+  font-size: 0.9rem;
+  color: var(--cdark);
 }
 .ws-card[data-tone] {
   border-top: 3px solid var(--ws-tone);
