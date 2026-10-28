@@ -650,6 +650,11 @@ body.ws-wide {
   break-inside: avoid;
   margin: 0 0 14px;
 }
+/* One card per row, in reading order: text meant to be read top to bottom. */
+.ws-board--stack {
+  columns: 1;
+  max-width: 46rem;
+}
 .ws-card[data-tone] {
   border-top: 3px solid var(--ws-tone);
 }
