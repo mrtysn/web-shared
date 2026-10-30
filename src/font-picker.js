@@ -37,7 +37,8 @@
   }
   apply(stored());
   function build() {
-    if (document.body.classList.contains("ws-deck")) return;
+    // A deck, and an app page (which keeps its own controls at the top), get no menu.
+    if (document.body.classList.contains("ws-deck") || document.body.classList.contains("ws-app")) return;
     var bar = document.createElement("div");
     bar.className = "ws-fontpick";
     var label = document.createElement("label");

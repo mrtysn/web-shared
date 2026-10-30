@@ -16,8 +16,8 @@ projects. Consumed as a **git submodule**, not an npm install.
 - `src/page.js` — the runtime every page needs: theme from the reader's preference, links in a new tab,
   contents highlight.
 - `src/font-picker.js` — a floating menu (`.ws-fontpick`) that swaps those two properties for a system
-  font and remembers the choice in `localStorage`. `page-vendor` appends it to `page.js`; deck pages get
-  no menu.
+  font and remembers the choice in `localStorage`. `page-vendor` appends it to `page.js`; deck pages
+  and app pages (`ws-app`) get no menu.
 - `src/components/` — domain-agnostic primitives: `Card`, `Grid`, `Toolbar`,
   `Stats`, `Tag`, `Badge`.
 - `tsconfig.base.json` — shared TypeScript defaults for consumer apps to extend.
