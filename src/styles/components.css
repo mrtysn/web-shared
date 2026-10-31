@@ -924,10 +924,11 @@ body.ws-wide {
   font-size: 0.9rem;
 }
 
-/* Progress (progress): <ul class="ws-progress"><li data-state="waiting|running|stalled|stale|done|failed">
+/* Progress (progress): <ul class="ws-progress"><li data-state="waiting|running|stalled|stale|done|failed|live">
    <div class="ws-progress__head"><span class="ws-progress__name">…</span><span class="ws-progress__figures">…</span></div>
    <div class="ws-progress__track" style="--value: 42%"></div><p class="ws-progress__note">…</p></li></ul>.
    A track with no --value and data-indeterminate is work whose total is not known yet.
+   live is a gauge (a reading such as CPU load), not work: its bar is the current value.
    ws-progress__total on the li is the overall row, drawn heavier. */
 .ws-progress {
   list-style: none;
@@ -963,6 +964,7 @@ body.ws-wide {
   background: color-mix(in srgb, var(--ws-state) 15%, transparent);
 }
 .ws-progress > li[data-state="waiting"] { --ws-state: var(--cdark); }
+.ws-progress > li[data-state="live"] { --ws-state: var(--cmed); }
 .ws-progress > li[data-state="stalled"],
 .ws-progress > li[data-state="stale"] { --ws-state: var(--cemph); }
 .ws-progress > li[data-state="done"] { --ws-state: var(--ws-good); }
