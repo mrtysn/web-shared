@@ -14,6 +14,42 @@ document.addEventListener("DOMContentLoaded", function () {
     a.target = "_blank";
     a.rel = "noopener noreferrer";
   });
+  // Every code block in the text gets a Copy button: pages often carry text meant to be pasted
+  // elsewhere. The clipboard API needs a secure context; a selection copy stands in without one.
+  [].forEach.call(document.querySelectorAll("main pre"), function (pre) {
+    if (pre.closest(".ws-no-copy")) return;
+    var wrap = document.createElement("div"), button = document.createElement("button");
+    wrap.className = "ws-copy-wrap";
+    button.type = "button";
+    button.className = "ws-copy";
+    button.textContent = "Copy";
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(button);
+    wrap.appendChild(pre);
+    function done(label) {
+      button.textContent = label;
+      setTimeout(function () { button.textContent = "Copy"; }, 1500);
+    }
+    function fallback(text) {
+      var area = document.createElement("textarea"), ok = false;
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.className = "ws-copy-buffer";
+      document.body.appendChild(area);
+      area.select();
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(area);
+      done(ok ? "Copied" : "Copy failed");
+    }
+    button.addEventListener("click", function () {
+      var text = pre.textContent.replace(/\n$/, "");
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function () { done("Copied"); }, function () { fallback(text); });
+      } else {
+        fallback(text);
+      }
+    });
+  });
   var links = [].slice.call(document.querySelectorAll(".ws-toc a"));
   if (!links.length) return;
   var sections = links.map(function (a) {

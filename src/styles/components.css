@@ -1577,6 +1577,37 @@ body.ws-deck > main > section.ws-slide--quote cite {
   }
 }
 
+/* The Copy button src/page.js puts above every code block in <main> (opt out with .ws-no-copy).
+   It sits above the block, never over it, so it hides no text. */
+.ws-copy {
+  display: block;
+  margin: 0 0 0.3rem auto;
+  padding: 0.1rem 0.6rem;
+  border: var(--border);
+  border-radius: 0.4rem;
+  background: var(--clight);
+  color: var(--cdark);
+  font: 12px/1.4 system-ui, sans-serif;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.ws-copy:hover,
+.ws-copy:focus-visible {
+  opacity: 1;
+}
+.ws-copy-buffer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+@media print {
+  .ws-copy {
+    display: none;
+  }
+}
+
 /* The font picker that src/font-picker.js adds as the first child of <body>. */
 .ws-fontpick {
   position: fixed;

@@ -13,7 +13,7 @@ projects. Consumed as a **git submodule**, not an npm install.
   page-new` writes such a page.
 - `src/styles/house-font.css` + `src/fonts/` — Ubuntu (300, 400, 700) as the default `--font-p`/`--font-h`,
   self-hosted; `page-new` inlines the files as data URIs. A palette's own `--font-p` wins over it.
-- `src/page.js` — the runtime every page needs: theme from the reader's preference, links in a new tab,
+- `src/page.js` — the runtime every page needs: theme from the reader's preference, links in a new tab, a Copy button on every code block in `<main>` (`.ws-no-copy` opts out),
   contents highlight.
 - `src/font-picker.js` — a floating menu (`.ws-fontpick`) that swaps those two properties for a system
   font and remembers the choice in `localStorage`. `page-vendor` appends it to `page.js`; deck pages
