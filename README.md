@@ -7,7 +7,7 @@ projects. Consumed as a **git submodule**, not an npm install.
 
 - `src/styles/classless.css` — the base/theme stylesheet (light + dark via
   `prefers-color-scheme`; no other themes).
-- `src/styles/components.css` — styles for the components below, and the `ws-doc` page layout:
+- `src/styles/components.css` — styles for the components below (an `<img>` opening a table cell becomes a small picture card), and the `ws-doc` page layout:
   `<body class="ws-doc"><nav class="ws-toc">…</nav><main>…</main></body>` puts a sticky contents
   column on the left (stacked above the text under 55rem, hidden in print). `project-lifecycle
   page-new` writes such a page.

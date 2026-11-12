@@ -1691,3 +1691,18 @@ body.ws-deck > main > section.ws-slide--quote cite {
     display: none;
   }
 }
+
+/* A product or item picture at the start of a table cell renders as a small card above the
+   cell's text: <td><img src="…" alt="…">Name</td>. The white ground keeps product shots,
+   which are cut out on white, readable in dark mode. */
+td > img:first-child {
+  display: block;
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 0.6rem;
+  padding: 0.3rem;
+  margin-bottom: 0.4rem;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+}
