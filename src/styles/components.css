@@ -1644,3 +1644,50 @@ body.ws-deck > main > section.ws-slide--quote cite {
     display: none;
   }
 }
+
+/* Sortable headers and the row filter that src/page.js adds to tables in <main> (opt out with .ws-static). */
+.ws-sort {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+.ws-sort:hover,
+.ws-sort:focus-visible {
+  color: var(--clink);
+}
+.ws-sort-mark {
+  min-width: 0.8em;
+  font-size: 0.7em;
+  color: var(--clink);
+}
+.ws-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.5rem 0 0.3rem;
+  font: 12px/1.4 system-ui, sans-serif;
+  color: var(--cfg);
+}
+.ws-filter input[type="search"][placeholder] {
+  width: 14rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 0.15rem 0.5rem;
+  font: inherit;
+}
+@media print {
+  .ws-filter {
+    display: none;
+  }
+  .ws-sort-mark {
+    display: none;
+  }
+}
