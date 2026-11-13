@@ -143,6 +143,15 @@ const PAGE_LIB = String.raw`(() => {
       const r = el.getBoundingClientRect(); if (r.right > vw + 1 && r.left < vw) {
         out.push({ check: "overflow", what: describe(el), detail: "right edge at " + Math.round(r.right) + " px, viewport " + vw + " px" });
         if (out.length > 6) break; } }
+    if (out.length === 1) { // text that cannot break spills out of its box: name the deepest such box
+      const spill = [...document.body.querySelectorAll("*")].filter((el) => !skip(el) && visible(el)
+        && getComputedStyle(el).overflowX === "visible" && el.scrollWidth > el.clientWidth + 1 && el.clientWidth > 0
+        && ![...el.children].some((c) => c.scrollWidth > c.clientWidth + 1 && getComputedStyle(c).overflowX === "visible"));
+      for (const el of spill.slice(0, 3)) out.push({ check: "overflow", what: describe(el), detail: "its content is " + el.scrollWidth + " px wide in a " + el.clientWidth + " px box (a word or URL that cannot break)" }); }
+    if (out.length === 1) { // the page overflows but no single element sticks out: name the furthest
+      const far = [...document.querySelectorAll("*")].filter((el) => !skip(el))
+        .map((el) => [el.getBoundingClientRect().right, el]).sort((a, b) => b[0] - a[0]).slice(0, 3);
+      for (const [right, el] of far) out.push({ check: "overflow", what: describe(el), detail: "reaches " + Math.round(right) + " px (inside a box that clips or scrolls)" }); }
     return out; };
   const pen = document.createElement("canvas").getContext("2d");
   lib.clipped = () => { const out = [];

@@ -64,6 +64,8 @@ good.
   **[check: contrast]**
 - **One accent.** `--clink` for links and focus, `--cemph` for the primary or current item, the
   status pair for good and bad. Danger is `--ws-bad`, never a literal red.
+- **A page drawn for one theme says so** with `<html data-theme-fixed="light">` (or `"dark"`); never
+  paint a light background over the dark tokens, which leaves their light text on it.
 - A coloured tile or chip sets its colour per theme: a light text colour on a dark tint does not
   survive the light theme.
 

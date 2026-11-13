@@ -118,6 +118,7 @@ body {
   color: var(--cfg);
   padding: 1.0rem 0.6rem 0;
   overflow-x: hidden;
+  overflow-wrap: break-word; /* a long name or URL breaks rather than widening a phone page */
 }
 body > footer {
   margin: 10rem 0rem 0rem;
@@ -618,6 +619,9 @@ select {
   padding: 0.4em 0.8em;
   color: var(--cfg);
   background-color: var(--clight);
+}
+textarea {
+  max-width: 100%; /* cols="80" would otherwise push a phone page sideways */
 }
 /* A field's text is at least 16 px: iOS zooms the page into any smaller field. */
 textarea,

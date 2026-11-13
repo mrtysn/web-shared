@@ -3,8 +3,11 @@
    this file, followed by font-picker.js, as ws/page.js. */
 (function () {
   var media = matchMedia("(prefers-color-scheme: light)");
+  /* A page drawn for one theme says so with <html data-theme-fixed="light">: its colours then
+     never mix with the other theme's tokens. */
+  var fixed = document.documentElement.getAttribute("data-theme-fixed");
   function theme() {
-    document.documentElement.dataset.theme = media.matches ? "light" : "dark";
+    document.documentElement.dataset.theme = fixed || (media.matches ? "light" : "dark");
   }
   theme();
   media.addEventListener("change", theme);
