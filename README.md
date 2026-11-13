@@ -22,6 +22,19 @@ projects. Consumed as a **git submodule**, not an npm install.
   `Stats`, `Tag`, `Badge`.
 - `tsconfig.base.json` — shared TypeScript defaults for consumer apps to extend.
 
+## Design rules and the page check
+
+`DESIGN.md` holds the house design rules: states that change colour never size, nothing scrolls
+sideways at 375 px, headings in scale, secondary text in `--cdark`, AA contrast in both themes,
+24 px targets, and the rest. `tools/check-page.mjs` enforces the measurable ones in headless
+Chrome at 375 and 1280 px, light and dark:
+
+    node tools/check-page.mjs [--widths 375,1280] [--shots DIR] [--only CHECK,...] [--json] URL|FILE ...
+
+(`project-lifecycle page-check` runs it from `web_shared_root`.) Node 22 or later and Chrome;
+`CHROME=` picks the binary. Exit 0 clean, 1 findings, 2 could not check. Tests:
+`node --test tools/check-page.test.mjs`, against a page with every mistake and one with none.
+
 ## Using it in a project
 
 Add as a submodule (public https in `.gitmodules`; override to the SSH alias
