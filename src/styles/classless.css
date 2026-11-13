@@ -301,6 +301,10 @@ samp {
   font: var(--font-c);
   background: var(--clight);
   border-radius: 4px;
+  overflow-wrap: anywhere; /* a long path breaks instead of pushing past a phone screen */
+}
+pre > code {
+  overflow-wrap: normal;
 }
 kbd {
   border: 1px solid var(--cmed);
@@ -614,6 +618,12 @@ select {
   padding: 0.4em 0.8em;
   color: var(--cfg);
   background-color: var(--clight);
+}
+/* A field's text is at least 16 px: iOS zooms the page into any smaller field. */
+textarea,
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+select {
+  font-size: max(1rem, 16px);
 }
 fieldset select,
 input:not([type="checkbox"]):not([type="radio"]) {

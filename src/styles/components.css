@@ -1588,13 +1588,13 @@ body.ws-deck > main > section.ws-slide--quote cite {
   background: var(--clight);
   color: var(--cdark);
   font: 12px/1.4 system-ui, sans-serif;
+  min-height: 24px;
   cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.15s;
 }
 .ws-copy:hover,
 .ws-copy:focus-visible {
-  opacity: 1;
+  color: var(--clink);
+  border-color: var(--clink);
 }
 .ws-copy-buffer {
   position: fixed;
@@ -1620,12 +1620,10 @@ body.ws-deck > main > section.ws-slide--quote cite {
   background: var(--clight);
   color: var(--cdark);
   font: 12px/1.4 system-ui, sans-serif;
-  opacity: 0.55;
-  transition: opacity 0.15s;
 }
 .ws-fontpick:hover,
 .ws-fontpick:focus-within {
-  opacity: 1;
+  border-color: var(--clink);
 }
 .ws-fontpick select {
   margin-left: 0.25rem;
@@ -1657,6 +1655,7 @@ body.ws-deck > main > section.ws-slide--quote cite {
   color: inherit;
   font: inherit;
   text-align: inherit;
+  min-height: 24px;
   cursor: pointer;
 }
 .ws-sort:hover,
@@ -1680,8 +1679,10 @@ body.ws-deck > main > section.ws-slide--quote cite {
   width: 14rem;
   max-width: 100%;
   margin: 0;
+  min-height: 2rem;
   padding: 0.15rem 0.5rem;
-  font: inherit;
+  font-family: inherit;
+  font-size: 16px;
 }
 @media print {
   .ws-filter {
