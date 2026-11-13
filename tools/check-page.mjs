@@ -115,13 +115,19 @@ const PAGE_LIB = String.raw`(() => {
     window.__ck_controls = els; return els.length; };
   const outOfFlow = (el) => { for (let e = el; e && e !== document.body; e = e.parentElement) {
     const p = getComputedStyle(e).position; if (p === "absolute" || p === "fixed" || p === "sticky") return true; } return false; };
+  const near = (el) => { const r = el.getBoundingClientRect(); return r.bottom > -innerHeight && r.top < 2 * innerHeight; };
   lib.prepare = (i) => { const c = window.__ck_controls[i];
     c.scrollIntoView({ block: "center", inline: "nearest" });
     window.__ck_watch = [...document.body.querySelectorAll("*")].filter((el) => el !== c && !c.contains(el) && !el.contains(c)
-      && !skip(el) && !outOfFlow(el));
+      && !skip(el) && !outOfFlow(el) && near(el));
     const r = c.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, what: describe(c) }; };
   lib.snap = () => window.__ck_watch.map((el) => { const r = el.getBoundingClientRect();
     return [r.left + scrollX, r.top + scrollY, r.width, r.height]; });
+  lib.settle = async () => { let a = lib.snap();
+    for (let t = 0; t < 10; t++) { await new Promise((r) => setTimeout(r, 100)); const b = lib.snap();
+      if (!lib.moved(a, b).n) { window.__ck_base = b; return true; } a = b; }
+    return false; };
+  lib.since = () => lib.moved(window.__ck_base, lib.snap());
   lib.focus = (i) => { window.__ck_controls[i].focus({ preventScroll: true }); };
   lib.blur = (i) => { window.__ck_controls[i].blur(); };
   lib.moved = (a, b) => { let n = 0, worst = 0, example = "";
@@ -238,21 +244,22 @@ async function moves() {
   for (let i = 0; i < limit; i++) {
     const c = await evaluate(`__ck.prepare(${i})`);
     await away();
-    const before = await evaluate("__ck.snap()");
-    await sleep(50);
-    const settled = await evaluate(`__ck.moved(${JSON.stringify(before)}, __ck.snap())`);
-    if (settled.n) { unsettled++; continue; }
+    if (!(await evaluate("__ck.settle()"))) { unsettled++; continue; }
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: c.x, y: c.y });
-    const hovered = await evaluate(`__ck.moved(${JSON.stringify(before)}, __ck.snap())`);
+    // A move counts only when it undoes itself once the state ends; one that stays was the
+    // page moving on its own (rendering on scroll, late content), not the hover.
+    const hovered = await evaluate("__ck.since()");
     await away();
+    if (hovered.n && (await evaluate("__ck.since()")).n) { unsettled++; continue; }
     await evaluate(`__ck.focus(${i})`);
-    const focused = await evaluate(`__ck.moved(${JSON.stringify(before)}, __ck.snap())`);
+    const focused = await evaluate("__ck.since()");
     await evaluate(`__ck.blur(${i})`);
+    if (focused.n && (await evaluate("__ck.since()")).n) { unsettled++; continue; }
     for (const [state, m] of [["hover", hovered], ["focus", focused]]) {
       if (m.n) out.push({ check: "moves", what: c.what, detail: `${state} moves ${m.n} other element${m.n > 1 ? "s" : ""} by up to ${m.worst} px (e.g. ${m.example})` });
     }
   }
-  if (unsettled) out.push({ check: "moves", what: "page", detail: `${unsettled} control${unsettled > 1 ? "s" : ""} skipped: the page moved with nothing hovered (late images or animation); give images a size` });
+  if (unsettled) out.push({ check: "note", what: "page", detail: `${unsettled} control${unsettled > 1 ? "s" : ""} not hovered: the page kept moving on its own (late images, rendering on scroll, animation)` });
   if (n > limit) out.push({ check: "note", what: "page", detail: `only the first ${limit} of ${n} controls were hovered` });
   return out;
 }
