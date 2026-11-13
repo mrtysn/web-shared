@@ -120,7 +120,8 @@ const PAGE_LIB = String.raw`(() => {
     window.__ck_watch = [...document.body.querySelectorAll("*")].filter((el) => el !== c && !c.contains(el) && !el.contains(c)
       && !skip(el) && !outOfFlow(el));
     const r = c.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, what: describe(c) }; };
-  lib.snap = () => window.__ck_watch.map((el) => { const r = el.getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; });
+  lib.snap = () => window.__ck_watch.map((el) => { const r = el.getBoundingClientRect();
+    return [r.left + scrollX, r.top + scrollY, r.width, r.height]; });
   lib.focus = (i) => { window.__ck_controls[i].focus({ preventScroll: true }); };
   lib.blur = (i) => { window.__ck_controls[i].blur(); };
   lib.moved = (a, b) => { let n = 0, worst = 0, example = "";
@@ -166,11 +167,11 @@ const PAGE_LIB = String.raw`(() => {
       out.push({ check: "headings", what: lo.what, detail: "h" + lo.level + " renders at " + lo.size + " px, larger than h" + hi.level + " " + hi.what + " at " + hi.size + " px" }); }
     return out; };
   lib.targets = () => { const out = [];
-    const els = document.querySelectorAll("button, select, summary, input:not([type=hidden]):not([type=checkbox]):not([type=radio]), a.button, [role=button]");
+    const els = document.querySelectorAll("button, select, summary, input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=range]), a.button, [role=button]");
     for (const el of els) { if (skip(el) || !visible(el)) continue; const r = el.getBoundingClientRect();
       if (r.width < 24 || r.height < 24) out.push({ check: "targets", what: describe(el), detail: Math.round(r.width) + " x " + Math.round(r.height) + " px, under 24 x 24" });
       if (out.length > 10) break; }
-    for (const el of document.querySelectorAll("input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=file]), select, textarea")) {
+    for (const el of document.querySelectorAll("input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color]), select, textarea")) {
       if (skip(el) || !visible(el)) continue; const fs = parseFloat(getComputedStyle(el).fontSize);
       if (fs < 16) out.push({ check: "targets", what: describe(el), detail: "text at " + fs + " px: iOS zooms into a field under 16 px" });
       if (out.length > 14) break; }
@@ -232,11 +233,15 @@ async function moves() {
   const out = [];
   const n = await evaluate("__ck.controls()");
   const limit = Math.min(n, 250);
+  let unsettled = 0;
   const away = () => send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 0, y: 0 });
   for (let i = 0; i < limit; i++) {
     const c = await evaluate(`__ck.prepare(${i})`);
     await away();
     const before = await evaluate("__ck.snap()");
+    await sleep(50);
+    const settled = await evaluate(`__ck.moved(${JSON.stringify(before)}, __ck.snap())`);
+    if (settled.n) { unsettled++; continue; }
     await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: c.x, y: c.y });
     const hovered = await evaluate(`__ck.moved(${JSON.stringify(before)}, __ck.snap())`);
     await away();
@@ -247,7 +252,8 @@ async function moves() {
       if (m.n) out.push({ check: "moves", what: c.what, detail: `${state} moves ${m.n} other element${m.n > 1 ? "s" : ""} by up to ${m.worst} px (e.g. ${m.example})` });
     }
   }
-  if (n > limit) out.push({ check: "moves", what: "page", detail: `only the first ${limit} of ${n} controls were hovered` });
+  if (unsettled) out.push({ check: "moves", what: "page", detail: `${unsettled} control${unsettled > 1 ? "s" : ""} skipped: the page moved with nothing hovered (late images or animation); give images a size` });
+  if (n > limit) out.push({ check: "note", what: "page", detail: `only the first ${limit} of ${n} controls were hovered` });
   return out;
 }
 
@@ -280,14 +286,17 @@ for (const url of urls) {
       console.error(`check-page: ${url} at ${width} px: ${err.message}`);
       quit(2);
     }
-    report.push({ url, width, findings: found });
-    if (found.length) failed = true;
+    const notes = found.filter((f) => f.check === "note");
+    const findings = found.filter((f) => f.check !== "note");
+    report.push({ url, width, findings, notes });
+    if (findings.length) failed = true;
   }
 }
 if (opt.json) console.log(JSON.stringify(report, null, 2));
 else for (const r of report) {
   console.log(`${r.findings.length ? "FAIL" : "ok  "} ${r.url} at ${r.width} px${r.findings.length ? `: ${r.findings.length} finding${r.findings.length > 1 ? "s" : ""}` : ""}`);
   for (const f of r.findings) console.log(`  ${f.check.padEnd(8)} ${f.what}: ${f.detail}`);
+  for (const f of r.notes) console.log(`  note     ${f.detail}`);
 }
 ws.close();
 quit(failed ? 1 : 0);
