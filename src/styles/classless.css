@@ -642,6 +642,11 @@ button {
   font-size: 85%;
   letter-spacing: 0.1em;
 }
+/* A thumb needs at least 24 x 24 px to hit a control. */
+button,
+summary {
+  min-height: 24px;
+}
 button[disabled] {
   color: var(--cdark);
   border-color: var(--cmed);
