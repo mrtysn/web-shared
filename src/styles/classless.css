@@ -641,14 +641,16 @@ fieldset {
   border: var(--border);
   padding: 0.5em 1em;
 }
+/* A state changes colour only, never size: an element styled without a border would grow
+   by the border's width on hover and push the page around. */
 textarea:hover,
 input:not([type="checkbox"]):not([type*="ra"]):hover,
 select:hover {
-  border: 1.5px solid var(--cemph);
+  border-color: var(--cemph);
 }
 textarea:focus,
 input:not([type="checkbox"]):not([type*="ra"]):focus {
-  border: 1.5px solid var(--clink);
+  border-color: var(--clink);
   box-shadow: 0 0 5px var(--clink);
 }
 p > button {
