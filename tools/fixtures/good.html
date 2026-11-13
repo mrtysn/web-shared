@@ -1,0 +1,21 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>No mistakes</title>
+<style>
+  body { font: 16px/1.5 sans-serif; background: #fff; color: #222; margin: 1rem; max-width: 40rem; }
+  h1 { font-size: 32px; } h2 { font-size: 22px; }
+  button { border: 2px solid #567; padding: .5rem 1rem; background: #fff; color: #222; }
+  button:hover, button:focus { border-color: #06c; outline: 2px solid #06c; }
+  .cut { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 60px; }
+  .muted { color: #666; }
+  input { padding: .5rem; font-size: 16px; }
+  .scroller { overflow-x: auto; } .scroller div { width: 900px; height: 10px; }
+</style></head><body>
+<h1>Title</h1><h2>Section</h2>
+<p><button>Hover me</button> <a href="#x">a link</a></p>
+<details><summary>More</summary><p>Inside</p></details>
+<div class=cut>This sentence ends in an ellipsis</div>
+<p class=muted>Secondary text that still reads</p>
+<div class=scroller><div></div></div>
+<input placeholder="Search">
+<div data-check-skip><p style="color:#eee">Skipped on purpose</p></div>
+</body></html>
