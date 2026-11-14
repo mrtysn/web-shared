@@ -68,6 +68,8 @@ good.
   paint a light background over the dark tokens, which leaves their light text on it.
 - A coloured tile or chip sets its colour per theme: a light text colour on a dark tint does not
   survive the light theme.
+- **A colour that marks a category (a device, an owner, a type) is quieter than the status colours
+  and never shares a hue with them,** so a tag is never read as good or bad.
 
 ## 5. Controls
 
@@ -82,6 +84,9 @@ good.
   others, quiet until hovered, and never next to the primary one without a gap.
 - **Hover styles live once, in the stylesheet that owns the control,** never per page: a fix made
   for one checkbox is a fix for every checkbox.
+- **Controls repeated in a strip or a set of overlays share one width and one height,** taken from
+  the screen width (a strip of eight keys is an eighth of it each), never from each label; a pinned
+  control at the end of a scrolling strip keeps the same size as the others.
 
 ## 6. Layout
 
@@ -113,6 +118,9 @@ good.
 
 ## 9. Checking a page
 
+0. **Before writing, open the pages beside it.** A new view in an app is built from that app's
+   existing views (their head, cards, buttons, spacing), and a new tool from the sibling tools of the
+   same kind. A page that looks nothing like its neighbours is wrong however well it scores.
 1. `check-page` at both widths: no findings, or each one fixed or marked `data-check-skip` with a
    reason in a comment beside it.
 2. Read the renders (`--shots`): density (is anything crammed?), alignment across a row, and the
