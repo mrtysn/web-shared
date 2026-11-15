@@ -18,6 +18,9 @@ projects. Consumed as a **git submodule**, not an npm install.
 - `src/font-picker.js` — a floating menu (`.ws-fontpick`) that swaps those two properties for a system
   font and remembers the choice in `localStorage`. `page-vendor` appends it to `page.js`; deck pages
   and app pages (`ws-app`) get no menu.
+- `src/view-width.js` — on a local page (localhost or `file://`), a corner button that switches between
+  the window's width and the page in a 390 px frame, so the phone layout is one click away. It does
+  nothing on a deployed site. A Vite site imports it: `import "<web-shared>/src/view-width.js"`.
 - `src/components/` — domain-agnostic primitives: `Card`, `Grid`, `Toolbar`,
   `Stats`, `Tag`, `Badge`.
 - `tsconfig.base.json` — shared TypeScript defaults for consumer apps to extend.
