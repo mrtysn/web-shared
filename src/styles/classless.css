@@ -846,6 +846,18 @@ p > select {
   h5 {
     page-break-after: avoid;
   }
+  /* a table that fits on a page moves whole to the next page instead of
+     splitting after a row or two; a longer one breaks between rows, with its
+     header repeated */
+  table {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tr {
+    break-inside: avoid;
+  }
   .noprint,
   body > nav,
   section:after {
