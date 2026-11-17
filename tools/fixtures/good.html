@@ -9,9 +9,10 @@
   .muted { color: #666; }
   input { padding: .5rem; font-size: 16px; }
   .scroller { overflow-x: auto; } .scroller div { width: 900px; height: 10px; }
+  .tinted:hover { background: color-mix(in oklab, #222 10%, #fff); }
 </style></head><body>
 <h1>Title</h1><h2>Section</h2>
-<p><button>Hover me</button> <a href="#x">a link</a></p>
+<p><button>Hover me</button> <a href="#x">a link</a> <button class=tinted>Tinted</button></p>
 <details><summary>More</summary><p>Inside</p></details>
 <div class=cut>This sentence ends in an ellipsis</div>
 <p class=muted>Secondary text that still reads</p>

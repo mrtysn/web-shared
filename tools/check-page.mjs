@@ -6,6 +6,7 @@
 //   headings a lower heading renders larger than a higher one (an h2 bigger than the h1)
 //   targets  a control smaller than 24 x 24 px, or a field's text under 16 px, at a phone width
 //   contrast text below WCAG AA against its background (4.5:1, 3:1 for large text), light and dark
+//   tints    a hover background within 1.15:1 of the colour behind it, light and dark
 // Each page is loaded at every width (375 and 1280 by default) with device emulation, since headless
 // Chrome's window never goes below 500 px. Elements inside [data-check-skip] are not checked.
 //
@@ -17,7 +18,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-const CHECKS = ["moves", "overflow", "clipped", "headings", "targets", "contrast"];
+const CHECKS = ["moves", "overflow", "clipped", "headings", "targets", "contrast", "tints"];
 const args = process.argv.slice(2);
 const opt = { widths: [375, 1280], shots: "", json: false, only: CHECKS };
 const urls = [];
@@ -154,6 +155,7 @@ const PAGE_LIB = String.raw`(() => {
       for (const [right, el] of far) out.push({ check: "overflow", what: describe(el), detail: "reaches " + Math.round(right) + " px (inside a box that clips or scrolls)" }); }
     return out; };
   const pen = document.createElement("canvas").getContext("2d");
+  const ink = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
   lib.clipped = () => { const out = [];
     for (const el of document.querySelectorAll("input[placeholder], textarea[placeholder]")) {
       if (skip(el) || !visible(el) || el.value || el.tagName === "TEXTAREA") continue;
@@ -195,7 +197,11 @@ const PAGE_LIB = String.raw`(() => {
     if (m) return [+m[1], +m[2], +m[3], m[4] === undefined ? 1 : m[4].endsWith("%") ? parseFloat(m[4]) / 100 : +m[4]];
     m = c.match(/^color\(srgb ([\d.e-]+) ([\d.e-]+) ([\d.e-]+)(?: \/ ([\d.]+))?\)/);
     if (m) return [m[1] * 255, m[2] * 255, m[3] * 255, m[4] === undefined ? 1 : +m[4]];
-    return null; };
+    // Any other colour the browser computes (oklab() from a color-mix, lab(), ...) is read by
+    // painting it on a canvas pixel.
+    if (!CSS.supports("color", c)) return null;
+    ink.clearRect(0, 0, 1, 1); ink.fillStyle = c; ink.fillRect(0, 0, 1, 1);
+    const d = ink.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2], d[3] / 255]; };
   const over = (top, under) => { const a = top[3]; return [0, 1, 2].map((k) => top[k] * a + under[k] * (1 - a)).concat(1); };
   const lum = (c) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
     return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]); };
@@ -223,6 +229,14 @@ const PAGE_LIB = String.raw`(() => {
         const g = groups.get(key) || { n: 0, r, need, what: describe(el) }; g.n++; groups.set(key, g); } }
     return [...groups.values()].sort((a, b) => a.r - b.r).slice(0, 8).map((g) => ({ check: "contrast", what: g.what,
       detail: "contrast " + g.r.toFixed(2) + ":1, needs " + g.need + ":1" + (g.n > 1 ? " (" + g.n + " elements like it)" : "") })); };
+  lib.fill = (i) => getComputedStyle(window.__ck_controls[i]).backgroundColor;
+  // A hover that paints a background must show against what is behind the control. A hover that
+  // takes a background away, or leaves it as it was, is not a tint.
+  lib.tint = (i, rest) => { const el = window.__ck_controls[i]; const now = getComputedStyle(el).backgroundColor;
+    if (now === rest) return null; const c = parse(now); if (!c || c[3] === 0) return null;
+    const b = el.parentElement && backdrop(el.parentElement); if (!b) return null;
+    const r = ratio(over(c, b.bg), b.bg);
+    return r + 0.005 < 1.15 ? { check: "tints", what: describe(el), detail: "hover background " + now + " is " + r.toFixed(2) + ":1 against the colour behind it, needs 1.15:1" } : null; };
   window.__ck = lib;
 })()`;
 
@@ -273,6 +287,22 @@ async function moves() {
   return out;
 }
 
+async function tints() {
+  const out = [];
+  const n = Math.min(await evaluate("__ck.controls()"), 250);
+  const away = () => send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 0, y: 0 });
+  for (let i = 0; i < n; i++) {
+    const c = await evaluate(`__ck.prepare(${i})`);
+    await away();
+    const rest = await evaluate(`__ck.fill(${i})`);
+    await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: c.x, y: c.y });
+    const found = await evaluate(`__ck.tint(${i}, ${JSON.stringify(rest)})`);
+    if (found) out.push(found);
+  }
+  await away();
+  return out;
+}
+
 const report = [];
 let failed = false;
 await send("Page.enable");
@@ -283,6 +313,7 @@ for (const url of urls) {
       for (const scheme of ["dark", "light"]) {
         await load(url, width, scheme);
         if (opt.only.includes("contrast")) found.push(...(await evaluate("__ck.contrast()")).map((f) => ({ ...f, detail: `${scheme}: ${f.detail}` })));
+        if (opt.only.includes("tints")) found.push(...(await tints()).map((f) => ({ ...f, detail: `${scheme}: ${f.detail}` })));
         if (opt.shots) {
           mkdirSync(opt.shots, { recursive: true });
           const { cssContentSize } = await send("Page.getLayoutMetrics");

@@ -57,11 +57,15 @@ good.
 ## 4. Colour
 
 - **Light and dark both, from `prefers-color-scheme` only,** through the palette tokens (`--cfg`,
-  `--cbg`, `--cdark`, `--clight`, `--cmed`, `--cfield`, `--clink`, `--cemph`, `--cemphbg`, and
+  `--cbg`, `--cdark`, `--clight`, `--chover`, `--cmed`, `--cfield`, `--clink`, `--cemph`, `--cemphbg`, and
   `--ws-good`, `--ws-bad` for status). No hex literal outside a palette block, whose ratios are
   measured and written beside each value.
 - **Text meets WCAG AA in both themes:** 4.5:1, or 3:1 at 24 px and above (18.66 px bold).
   **[check: contrast]**
+- **A hover or selected background is `--chover`, never `--clight`.** `--chover` is the text
+  colour at 10% over the page, so it steps the same distance from the page in every palette and
+  both themes; `--clight` is a surface and in light themes sits as light as the page.
+  **[check: tints]**
 - **One accent.** `--clink` for links and focus, `--cemph` for the primary or current item, the
   status pair for good and bad. Danger is `--ws-bad`, never a literal red.
 - **A page drawn for one theme says so** with `<html data-theme-fixed="light">` (or `"dark"`); never

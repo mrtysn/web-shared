@@ -19,7 +19,8 @@ test("a page with every mistake fails each check", () => {
   assert.equal(code, 1);
   const narrow = report.find((r) => r.width === 375).findings;
   const kinds = new Set(narrow.map((f) => f.check));
-  for (const k of ["moves", "overflow", "clipped", "headings", "targets", "contrast"]) assert.ok(kinds.has(k), `no ${k} finding`);
+  for (const k of ["moves", "overflow", "clipped", "headings", "targets", "contrast", "tints"]) assert.ok(kinds.has(k), `no ${k} finding`);
+  assert.ok(narrow.some((f) => f.check === "tints" && /Pale hover/.test(f.what) && /^light: .* 1\.0\d:1/.test(f.detail)));
   assert.ok(narrow.some((f) => f.check === "moves" && /hover/.test(f.detail) && /Hover me/.test(f.what)));
   assert.ok(narrow.some((f) => f.check === "moves" && /focus/.test(f.detail)));
   assert.ok(narrow.some((f) => f.check === "clipped" && /placeholder/.test(f.detail)));

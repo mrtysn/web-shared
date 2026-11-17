@@ -39,6 +39,11 @@ html[data-theme="dark"] {
   --clink: #66d1ff; /* Lc 62+ even on a badge; #1ad was Lc 41-48 */
   --cemph: #3dd5b2; /* Lc 62 on --clight; #0b9 was Lc 49 */
   --cemphbg: #3dd5b218;
+  /* A hover or selected background: the text colour at 10% over the page, mixed in OKLab, so it
+     steps the same distance from the page in every palette and theme (1.20-1.26:1 against --cbg in
+     base, warm, pastel and slate, light and dark). It is resolved here, on the root, from whichever
+     theme and palette set --cfg and --cbg. */
+  --chover: color-mix(in oklab, var(--cfg) 10%, var(--cbg));
 }
 
 html[data-theme="light"] {
@@ -232,7 +237,7 @@ th:first-child {
   text-align: left;
 }
 tr:hover {
-  background-color: var(--clight);
+  background-color: var(--chover);
 }
 table img {
   display: block;
