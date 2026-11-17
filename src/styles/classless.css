@@ -863,6 +863,22 @@ p > select {
   tr {
     break-inside: avoid;
   }
+  /* a heading and the short lead-in under it go with the table or subheading
+     they introduce, so a table pushed to the next page does not strand its
+     section title at the foot of the page before */
+  h2,
+  h3,
+  h4,
+  h5 {
+    break-after: avoid;
+  }
+  p:has(+ table),
+  p:has(+ h3),
+  p:has(+ h4),
+  p:has(+ .ws-callout) {
+    break-after: avoid;
+    break-inside: avoid;
+  }
   .noprint,
   body > nav,
   section:after {
