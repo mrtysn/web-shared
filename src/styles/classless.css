@@ -879,6 +879,21 @@ p > select {
     break-after: avoid;
     break-inside: avoid;
   }
+  /* a list that fits on a page moves whole, with its heading, instead of
+     leaving one item under the heading and the rest overleaf; a list longer
+     than a page still breaks, between items */
+  ul,
+  ol {
+    break-inside: avoid;
+  }
+  li {
+    break-inside: avoid;
+  }
+  p:has(+ ul),
+  p:has(+ ol) {
+    break-after: avoid;
+    break-inside: avoid;
+  }
   .noprint,
   body > nav,
   section:after {
