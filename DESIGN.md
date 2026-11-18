@@ -33,6 +33,9 @@ good.
 - **Nothing scrolls sideways at 375 px** except a table or a scroller made for it, and the page
   itself never does. Long words and URLs break (`overflow-wrap: anywhere` on cards and cells); grid
   children get `min-width: 0`. **[check: overflow]**
+- **A code block wraps; it never scrolls sideways.** A drafted message sits in one long line, and a
+  line cut off at the block's edge cannot be read or checked. `pre > code` is `white-space:
+  pre-wrap`.
 - **Text is never cut off silently.** A box that hides overflow shows an ellipsis or a line clamp; a
   placeholder fits its field at the narrowest width, or is shortened. **[check: clipped]**
 - **Wide content wraps into a grid of cards on a phone**, not a horizontal scroller, unless the
