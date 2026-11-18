@@ -21,6 +21,11 @@ projects. Consumed as a **git submodule**, not an npm install.
 - `src/view-width.js` — on a local page (localhost or `file://`), a corner button that switches between
   the window's width and the page in a 390 px frame, so the phone layout is one click away. It does
   nothing on a deployed site. A Vite site imports it: `import "<web-shared>/src/view-width.js"`.
+- `src/viewer.js` — a picture viewer for galleries: a click on a picture inside `.ws-gallery` or any
+  element with `data-ws-viewer` opens it large over the page (the href of the link around it, else
+  the picture), captioned, with ←/→, swipes and side buttons stepping through that gallery; Esc or a
+  click beside it closes. Its styles come with it. A Vite site imports it:
+  `import "<web-shared>/src/viewer.js"`.
 - `src/components/` — domain-agnostic primitives: `Card`, `Grid`, `Toolbar`,
   `Stats`, `Tag`, `Badge`.
 - `tsconfig.base.json` — shared TypeScript defaults for consumer apps to extend.
