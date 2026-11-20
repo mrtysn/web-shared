@@ -271,6 +271,23 @@ body.ws-doc > nav.ws-toc + * {
   letter-spacing: 0.6px;
   color: var(--cdark);
 }
+/* Tickable task lists (page.js, <html data-ws-tasks="tick">): the count of ticked lines, and a box
+   large enough to hit on a phone. */
+.ws-task-count {
+  margin: 0.6rem 0 0;
+  font-size: 0.8rem;
+  color: var(--cdark);
+}
+html[data-ws-tasks="tick"] main li > input[type="checkbox"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 0.4rem 0 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+html[data-ws-tasks="tick"] main li > input[type="checkbox"]:disabled {
+  cursor: default;
+}
 @media (max-width: 55rem) {
   body.ws-doc {
     display: block;

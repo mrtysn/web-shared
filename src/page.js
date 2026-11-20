@@ -182,3 +182,50 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+/* Task lists on a page that asks for it (<html data-ws-tasks="tick">) are ticked by the reader. A
+   tick is kept in this browser's localStorage under the page's path and the line's own text, so a
+   rebuilt page keeps the tick of every line whose wording did not change. A box the page's source
+   already ticked stays ticked and read-only. The contents column, or the place above the first task
+   list on a page without one, shows how many are done. */
+document.addEventListener("DOMContentLoaded", function () {
+  if (document.documentElement.getAttribute("data-ws-tasks") !== "tick") return;
+  var boxes = [].slice.call(document.querySelectorAll('main li > input[type="checkbox"]'));
+  if (!boxes.length) return;
+  var KEY = "ws-tasks:" + location.pathname, saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+  function lineOf(box) {
+    var text = "";
+    [].forEach.call(box.parentNode.childNodes, function (node) {
+      if (node.nodeType === 3) text += node.textContent;
+      else if (node.nodeType === 1 && !/^(UL|OL|INPUT)$/.test(node.tagName)) text += node.textContent;
+    });
+    return text.replace(/\s+/g, " ").trim();
+  }
+  var count = document.createElement("p"), toc = document.querySelector(".ws-toc");
+  count.className = "ws-task-count";
+  count.setAttribute("aria-live", "polite");
+  if (toc) toc.appendChild(count);
+  else {
+    var list = boxes[0].parentNode.parentNode;
+    list.parentNode.insertBefore(count, list);
+  }
+  function show() {
+    var done = boxes.filter(function (box) { return box.checked; }).length;
+    count.textContent = done + " of " + boxes.length + " done";
+  }
+  boxes.forEach(function (box) {
+    var line = lineOf(box);
+    box.setAttribute("aria-label", line.slice(0, 80));
+    if (box.checked) return;
+    box.disabled = false;
+    box.checked = saved[line] === true;
+    box.addEventListener("change", function () {
+      if (box.checked) saved[line] = true;
+      else delete saved[line];
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      show();
+    });
+  });
+  show();
+});
