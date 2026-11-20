@@ -2,11 +2,46 @@
    right corner switches between the page at the window's width and the page in a 390 px frame, a
    phone's width. Breakpoints follow the window, not an element, so the narrow view loads the same
    address in an iframe of that width; the copy inside the frame shows no button. The choice lasts
-   for the tab (sessionStorage). Anywhere else the script does nothing. */
+   for the tab (sessionStorage). The copy inside the frame keeps the window's address and title in step
+   with the frame's, so a link followed in the frame shows in the address bar, and the page behind the
+   frame follows it too. Anywhere else the script does nothing. */
 (function () {
   var host = location.hostname;
   var local = location.protocol === "file:" || host === "localhost" || host === "127.0.0.1" || host === "[::1]";
-  if (!local || window.self !== window.top) return;
+  if (!local) return;
+
+  if (window.self !== window.top) {
+    var outer;
+    try {
+      outer = window.parent;
+      if (!outer.document.querySelector(".ws-view-width")) return;
+    } catch (e) {
+      return;
+    }
+    // The window takes the frame's address with replaceState, so its history gains no entries of its
+    // own, and hears a popstate, so a single-page app behind the frame routes to it as well.
+    var mirror = function () {
+      try {
+        if (outer.location.href !== location.href) {
+          outer.history.replaceState(outer.history.state, "", location.href);
+          outer.dispatchEvent(new PopStateEvent("popstate", { state: outer.history.state }));
+        }
+        if (outer.document.title !== document.title) outer.document.title = document.title;
+      } catch (e) {}
+    };
+    ["pushState", "replaceState"].forEach(function (name) {
+      var original = history[name];
+      history[name] = function () {
+        var result = original.apply(this, arguments);
+        mirror();
+        return result;
+      };
+    });
+    window.addEventListener("popstate", mirror);
+    new MutationObserver(mirror).observe(document.head, { subtree: true, childList: true, characterData: true });
+    mirror();
+    return;
+  }
 
   var KEY = "ws-view-width";
   var NARROW = 390;
