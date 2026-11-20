@@ -7,6 +7,8 @@
 //   targets  a control smaller than 24 x 24 px, or a field's text under 16 px, at a phone width
 //   contrast text below WCAG AA against its background (4.5:1, 3:1 for large text), light and dark
 //   tints    a hover background within 1.15:1 of the colour behind it, light and dark
+//   nav      (only with --only nav, given two or more pages of one app) the navigation bar sits at a
+//            different place or size on one page than on the first
 // Each page is loaded at every width (375 and 1280 by default) with device emulation, since headless
 // Chrome's window never goes below 500 px. Elements inside [data-check-skip] are not checked.
 //
@@ -18,9 +20,10 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-const CHECKS = ["moves", "overflow", "clipped", "headings", "targets", "contrast", "tints"];
+const CHECKS = ["moves", "overflow", "clipped", "headings", "targets", "contrast", "tints", "nav"];
+const DEFAULT_CHECKS = CHECKS.filter((c) => c !== "nav");
 const args = process.argv.slice(2);
-const opt = { widths: [375, 1280], shots: "", json: false, only: CHECKS };
+const opt = { widths: [375, 1280], shots: "", json: false, only: DEFAULT_CHECKS };
 const urls = [];
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
@@ -229,6 +232,10 @@ const PAGE_LIB = String.raw`(() => {
         const g = groups.get(key) || { n: 0, r, need, what: describe(el) }; g.n++; groups.set(key, g); } }
     return [...groups.values()].sort((a, b) => a.r - b.r).slice(0, 8).map((g) => ({ check: "contrast", what: g.what,
       detail: "contrast " + g.r.toFixed(2) + ":1, needs " + g.need + ":1" + (g.n > 1 ? " (" + g.n + " elements like it)" : "") })); };
+  // The bar of a page: the first nav inside a header or banner, else a nav directly under body.
+  lib.nav = () => { const el = [...document.querySelectorAll("header nav, [role=banner] nav, body > nav")].find((e) => !skip(e) && visible(e));
+    if (!el) return null; const r = el.getBoundingClientRect();
+    return { what: describe(el), box: [r.left, r.top + scrollY, r.width, r.height].map((v) => Math.round(v * 2) / 2) }; };
   lib.fill = (i) => getComputedStyle(window.__ck_controls[i]).backgroundColor;
   // A hover that paints a background must show against what is behind the control. A hover that
   // takes a background away, or leaves it as it was, is not a tint.
@@ -304,6 +311,7 @@ async function tints() {
 }
 
 const report = [];
+const firstNav = new Map(); // width -> the first page's bar, which the others are compared with
 let failed = false;
 await send("Page.enable");
 for (const url of urls) {
@@ -326,6 +334,13 @@ for (const url of urls) {
         }
         if (scheme === "light") continue;
         for (const check of ["overflow", "clipped", "headings"]) if (opt.only.includes(check)) found.push(...await evaluate(`__ck.${check}()`));
+        if (opt.only.includes("nav")) {
+          const bar = await evaluate("__ck.nav()");
+          if (!bar) found.push({ check: "note", what: "page", detail: "nav: this page has no navigation bar (a nav inside a header, or directly under body)" });
+          else if (!firstNav.has(width)) firstNav.set(width, bar);
+          else { const was = firstNav.get(width); const d = Math.max(...bar.box.map((v, j) => Math.abs(v - was.box[j])));
+            if (d > 1) found.push({ check: "nav", what: bar.what, detail: `bar at ${bar.box.join(", ")} (x, y, width, height); the first page's is at ${was.box.join(", ")}: one bar, in one place, on every page` }); }
+        }
         if (width < 600 && opt.only.includes("targets")) found.push(...await evaluate("__ck.targets()"));
         if (opt.only.includes("moves")) found.push(...await moves());
       }

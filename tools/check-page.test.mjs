@@ -37,3 +37,27 @@ test("a page that is not HTML cannot be checked", () => {
   const { code } = check("../check-page.mjs");
   assert.equal(code, 2);
 });
+
+function checkNav(...pages) {
+  try {
+    return { code: 0, report: JSON.parse(execFileSync("node", [join(here, "check-page.mjs"), "--json", "--only", "nav", ...pages.map((p) => join(here, "fixtures", p))], { encoding: "utf8" })) };
+  } catch (err) {
+    return { code: err.status, report: err.stdout ? JSON.parse(err.stdout) : null, stderr: String(err.stderr) };
+  }
+}
+
+test("pages whose navigation bar sits in the same place pass the nav check", () => {
+  const { code, report, stderr } = checkNav("nav-a.html", "nav-b.html");
+  assert.equal(code, 0, JSON.stringify(report ?? stderr));
+});
+
+test("a page whose navigation bar differs from the first page's fails the nav check", () => {
+  const { code, report } = checkNav("nav-a.html", "nav-c.html");
+  assert.equal(code, 1);
+  assert.ok(report.every((r) => r.url.endsWith("nav-c.html") ? r.findings.some((f) => f.check === "nav") : r.findings.length === 0));
+});
+
+test("the nav check is not part of a default run", () => {
+  const out = execFileSync("node", [join(here, "check-page.mjs"), "--json", join(here, "fixtures", "nav-a.html"), join(here, "fixtures", "nav-c.html")], { encoding: "utf8" });
+  assert.ok(JSON.parse(out).every((r) => r.findings.length === 0));
+});

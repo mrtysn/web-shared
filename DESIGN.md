@@ -123,7 +123,25 @@ good.
 - Transitions on colour and transform only, under 200 ms, none on layout properties.
 - `prefers-reduced-motion: reduce` turns motion off.
 
-## 9. Checking a page
+## 9. Behaviour
+
+For a page that is a tool someone uses for hours. The kind-neutral list is in agents-shared's
+`interface-behaviour`; what it means on the web:
+
+- **One navigation bar** (a `nav` in the page's `header`), at the same place and size on every page
+  of the app; a change of view never moves it. **[check: nav]** needs two or more pages of one app in a
+  run and is not part of the default run: `node tools/check-page.mjs --only nav A.html B.html`.
+- **A new way to order, filter or browse is a control on the page that exists,** not another page;
+  a mode that only browses writes nothing.
+- **A count states the item's place** ("3 of 3") and a progress bar counts what is left in the pass
+  the reader is in, so it cannot pass 100%.
+- **A control either holds a mode or does a thing once, and its label and state say which:** a mode
+  is a toggle (`aria-pressed`) that stays visibly on; an action is a button that does not.
+- **One verb keeps one meaning across the app.**
+- **A message says what is true** ("none yet", not "loading" when nothing loads) and a failure names
+  what failed and what to run or press.
+
+## 10. Checking a page
 
 0. **Before writing, open the pages beside it.** A new view in an app is built from that app's
    existing views (their head, cards, buttons, spacing), and a new tool from the sibling tools of the
