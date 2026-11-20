@@ -57,6 +57,7 @@ Point a Vite/TS alias at it, then:
 
 ```ts
 import "@shared/styles/classless.css";
+import "@shared/styles/house-font.css"; // after classless.css, which it overrides
 import "@shared/styles/components.css";
 import { Card, Grid, Toolbar, Stats } from "@shared";
 ```
