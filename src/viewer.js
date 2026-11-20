@@ -35,7 +35,11 @@
     "  color: var(--cdark); }",
     ".ws-viewer-count { margin-left: 0.5rem; font-variant-numeric: tabular-nums; white-space: nowrap; }",
     ".ws-viewer button { position: fixed; display: grid; place-items: center; width: 2.6rem;",
-    "  height: 2.6rem; margin: 0; padding: 0; border-radius: 50%; font-size: 1.4rem; line-height: 1; }",
+    "  height: 2.6rem; margin: 0; padding: 0; border-radius: 50%; }",
+    // Each button's mark is a drawn icon whose centre is the button's: a text glyph sits where its
+    // font puts it on the line, which is off the middle.
+    ".ws-viewer button svg { display: block; width: 1rem; height: 1rem; fill: none; stroke: currentColor;",
+    "  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }",
     ".ws-viewer button:focus-visible { outline: 2px solid var(--clink); outline-offset: 2px; }",
     ".ws-viewer-close { top: 0.5rem; right: 0.5rem; }",
     ".ws-viewer-prev, .ws-viewer-next { top: calc(50% - 1.3rem); }",
@@ -69,12 +73,19 @@
     return (cap && cap.textContent.trim()) || pic.title || pic.alt || "";
   }
 
-  function button(cls, label, glyph, act) {
+  // The buttons' marks, as paths in a 16 by 16 box centred on (8, 8).
+  var ICONS = {
+    close: "M3.5 3.5 12.5 12.5M12.5 3.5 3.5 12.5",
+    prev: "M10 3 5 8 10 13",
+    next: "M6 3 11 8 6 13",
+  };
+
+  function button(cls, label, icon, act) {
     var b = document.createElement("button");
     b.type = "button";
     b.className = cls;
     b.setAttribute("aria-label", label);
-    b.textContent = glyph;
+    b.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="' + ICONS[icon] + '"/></svg>';
     b.addEventListener("click", function (e) {
       e.stopPropagation();
       act();
@@ -96,16 +107,16 @@
     count.className = "ws-viewer-count";
     cap.append(caption, count);
     figure.append(big, cap);
-    var close = button("ws-viewer-close", "Close", "×", function () {
+    var close = button("ws-viewer-close", "Close", "close", function () {
       dialog.close();
     });
     close.autofocus = true;
     dialog.append(
       figure,
-      button("ws-viewer-prev", "Previous picture", "‹", function () {
+      button("ws-viewer-prev", "Previous picture", "prev", function () {
         show(at - 1);
       }),
-      button("ws-viewer-next", "Next picture", "›", function () {
+      button("ws-viewer-next", "Next picture", "next", function () {
         show(at + 1);
       }),
       close,
@@ -124,19 +135,42 @@
         show(at + 1);
       }
     });
+    // A swipe on a touch screen is read from touch events: once a finger moves, the browser takes the
+    // gesture and cancels the pointer, so a pointerup never comes, while touchend still does. A mouse
+    // or pen drag is read from pointer events. One finger only: a second makes it a pinch. While the
+    // page is pinch-zoomed, a one-finger drag moves around the picture and steps nothing.
+    function swipe(x, y) {
+      var dx = x - start.x;
+      var dy = y - start.y;
+      start = null;
+      var zoomed = window.visualViewport && window.visualViewport.scale > 1.01;
+      if (!zoomed && items.length > 1 && Math.abs(dx) > SWIPE_PX && Math.abs(dx) > Math.abs(dy)) {
+        swiped = true;
+        show(at + (dx < 0 ? 1 : -1));
+      }
+    }
+    dialog.addEventListener(
+      "touchstart",
+      function (e) {
+        var t = e.touches[0];
+        start = e.touches.length === 1 ? { x: t.clientX, y: t.clientY } : null;
+        swiped = false;
+      },
+      { passive: true },
+    );
+    dialog.addEventListener("touchend", function (e) {
+      if (start && e.touches.length === 0) swipe(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+    });
+    dialog.addEventListener("touchcancel", function () {
+      start = null;
+    });
     dialog.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "touch") return;
       start = { x: e.clientX, y: e.clientY };
       swiped = false;
     });
     dialog.addEventListener("pointerup", function (e) {
-      if (!start) return;
-      var dx = e.clientX - start.x;
-      var dy = e.clientY - start.y;
-      start = null;
-      if (items.length > 1 && Math.abs(dx) > SWIPE_PX && Math.abs(dx) > Math.abs(dy)) {
-        swiped = true;
-        show(at + (dx < 0 ? 1 : -1));
-      }
+      if (e.pointerType !== "touch" && start) swipe(e.clientX, e.clientY);
     });
     dialog.addEventListener("close", function () {
       document.documentElement.style.overflow = "";
