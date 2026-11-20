@@ -1024,6 +1024,73 @@ body.ws-wide {
 .ws-progress__note:empty {
   display: none;
 }
+/* Steps: a row with <ul class="ws-progress__steps"> after the note, and data-steps, tabindex="0",
+   role="button" and aria-expanded on the li, opens on a click (script-driven) to list its steps,
+   each <li data-state="waiting|running|done|failed">title</li>. Closed unless aria-expanded="true". */
+.ws-progress > li[data-steps] {
+  cursor: pointer;
+}
+.ws-progress > li[data-steps] > .ws-progress__head > .ws-progress__name::before {
+  content: "";
+  display: inline-block;
+  width: 0.4em;
+  height: 0.4em;
+  margin-right: 0.55em;
+  border: solid var(--cdark);
+  border-width: 0 2px 2px 0;
+  transform: translateY(-0.12em) rotate(-45deg);
+  transition: transform 0.15s ease;
+}
+.ws-progress > li[data-steps][aria-expanded="true"] > .ws-progress__head > .ws-progress__name::before {
+  transform: translateY(-0.2em) rotate(45deg);
+}
+.ws-progress > li[data-steps]:focus-visible {
+  outline: 2px solid var(--clink);
+  outline-offset: 2px;
+}
+.ws-progress__steps {
+  grid-column: 2;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: none;
+  gap: 2px;
+  cursor: default;
+}
+.ws-progress > li[aria-expanded="true"] > .ws-progress__steps {
+  display: grid;
+}
+.ws-progress__steps > li {
+  --ws-step: var(--cdark);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  margin: 0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+.ws-progress__steps > li::before {
+  content: attr(data-state);
+  flex: none;
+  min-width: 4.6em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ws-step);
+}
+.ws-progress__steps > li[data-state="done"] { --ws-step: var(--ws-good); }
+.ws-progress__steps > li[data-state="failed"] { --ws-step: var(--ws-bad); }
+.ws-progress__steps > li[data-state="running"] {
+  --ws-step: var(--clink);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--clink) 12%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-progress > li[data-steps] > .ws-progress__head > .ws-progress__name::before { transition: none; }
+}
 .ws-progress > li.ws-progress__total {
   padding: 12px 14px;
   border-width: 2px;
