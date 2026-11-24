@@ -1043,11 +1043,12 @@ body.ws-wide {
 }
 /* Steps: a row with <ul class="ws-progress__steps"> after the note, and data-steps, tabindex="0",
    role="button" and aria-expanded on the li, opens on a click (script-driven) to list its steps,
-   each <li data-state="waiting|running|done|failed">title</li>. Closed unless aria-expanded="true". */
-.ws-progress > li[data-steps] {
+   each <li data-state="waiting|running|done|failed">title</li>. Closed unless aria-expanded="true".
+   A row with a target or a log carries data-detail instead (or as well) and opens the same way. */
+.ws-progress > li:is([data-steps], [data-detail]) {
   cursor: pointer;
 }
-.ws-progress > li[data-steps] > .ws-progress__head > .ws-progress__name::before {
+.ws-progress > li:is([data-steps], [data-detail]) > .ws-progress__head > .ws-progress__name::before {
   content: "";
   display: inline-block;
   width: 0.4em;
@@ -1058,10 +1059,10 @@ body.ws-wide {
   transform: translateY(-0.12em) rotate(-45deg);
   transition: transform 0.15s ease;
 }
-.ws-progress > li[data-steps][aria-expanded="true"] > .ws-progress__head > .ws-progress__name::before {
+.ws-progress > li:is([data-steps], [data-detail])[aria-expanded="true"] > .ws-progress__head > .ws-progress__name::before {
   transform: translateY(-0.2em) rotate(45deg);
 }
-.ws-progress > li[data-steps]:focus-visible {
+.ws-progress > li:is([data-steps], [data-detail]):focus-visible {
   outline: 2px solid var(--clink);
   outline-offset: 2px;
 }
@@ -1106,7 +1107,92 @@ body.ws-wide {
   background: color-mix(in srgb, var(--clink) 12%, transparent);
 }
 @media (prefers-reduced-motion: reduce) {
-  .ws-progress > li[data-steps] > .ws-progress__head > .ws-progress__name::before { transition: none; }
+  .ws-progress > li:is([data-steps], [data-detail]) > .ws-progress__head > .ws-progress__name::before { transition: none; }
+}
+/* Detail: <div class="ws-progress__detail"> last in a row with data-detail, shown when the row is open.
+   Holds, in order, <div class="ws-progress__compare"> (the target beside the latest log entry; wraps
+   under it when narrow) and <ul class="ws-progress__log"> (the earlier entries, newest first).
+   An entry (div or li, class ws-progress__entry) is <p class="ws-progress__when">time</p>, then
+   <p class="ws-progress__text"> and <div class="ws-progress__images"> of
+   <a class="ws-progress__image" href="full size"><img src alt></a> thumbnails, each box a fixed shape
+   so a picture arriving moves nothing. */
+.ws-progress__detail {
+  grid-column: 2;
+  display: none;
+  gap: 12px;
+  margin-top: 4px;
+  min-width: 0;
+  cursor: default;
+}
+.ws-progress > li[aria-expanded="true"] > .ws-progress__detail {
+  display: grid;
+}
+.ws-progress__compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  gap: 8px;
+}
+.ws-progress__compare > .ws-progress__entry {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--cmed) 12%, transparent);
+}
+.ws-progress__entry {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+}
+.ws-progress__when {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--cdark);
+}
+.ws-progress__text {
+  margin: 0;
+  font-size: 0.9rem;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.ws-progress__images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ws-progress__image {
+  display: block;
+  width: min(8rem, 100%);
+  aspect-ratio: 4 / 3;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid var(--ws-rule);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--cmed) 12%, transparent);
+}
+.ws-progress__image:hover {
+  border-color: var(--clink);
+}
+.ws-progress__image:focus-visible {
+  outline: 2px solid var(--clink);
+  outline-offset: 2px;
+}
+.ws-progress__image > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.ws-progress__log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
 }
 .ws-progress > li.ws-progress__total {
   padding: 12px 14px;
