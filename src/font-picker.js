@@ -39,8 +39,18 @@
   function build() {
     // A deck, and an app page (which keeps its own controls at the top), get no menu.
     if (document.body.classList.contains("ws-deck") || document.body.classList.contains("ws-app")) return;
+    // A screen-only control (README, "Screen-only controls"): an automated browser (a PDF render, a
+    // screenshot, a page check) gets no menu, and print hides it.
+    if (navigator.webdriver) return;
+    if (!document.getElementById("ws-screen-only")) {
+      var style = document.createElement("style");
+      style.id = "ws-screen-only";
+      style.textContent = "@media print{[data-ws-screen-only]{display:none!important}}";
+      document.head.appendChild(style);
+    }
     var bar = document.createElement("div");
     bar.className = "ws-fontpick";
+    bar.setAttribute("data-ws-screen-only", "");
     var label = document.createElement("label");
     label.textContent = "Font ";
     var select = document.createElement("select");

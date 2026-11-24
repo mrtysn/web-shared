@@ -43,6 +43,12 @@
     return;
   }
 
+  // A tool for the person at the screen, never part of the page itself: an automated browser (a PDF
+  // render, a screenshot, a page check) gets no button, and print hides it. Every web-shared control
+  // that floats over a page follows the same two rules; see README, "Screen-only controls".
+  if (navigator.webdriver) return;
+  screenOnlyInPrint();
+
   var KEY = "ws-view-width";
   var NARROW = 390;
   var frame = null;
@@ -50,6 +56,7 @@
   var button = document.createElement("button");
   button.type = "button";
   button.className = "ws-view-width";
+  button.setAttribute("data-ws-screen-only", "");
   button.style.cssText =
     "position:fixed;right:0.5rem;bottom:0.5rem;z-index:2147483647;margin:0;padding:0.25rem 0.5rem;" +
     "font:12px/1.4 ui-monospace,Menlo,monospace;letter-spacing:normal;text-transform:none;" +
@@ -59,6 +66,7 @@
   function show(narrow) {
     if (narrow && !frame) {
       frame = document.createElement("div");
+      frame.setAttribute("data-ws-screen-only", "");
       frame.style.cssText =
         "position:fixed;inset:0;z-index:2147483646;display:flex;justify-content:center;" +
         "background:var(--cbg,#fff)";
@@ -100,4 +108,14 @@
   }
   if (document.body) start();
   else document.addEventListener("DOMContentLoaded", start);
+
+  // The print rule ships with the script, because a site may import this file without web-shared's
+  // stylesheets. One <style> per page, whichever control adds it first.
+  function screenOnlyInPrint() {
+    if (document.getElementById("ws-screen-only")) return;
+    var style = document.createElement("style");
+    style.id = "ws-screen-only";
+    style.textContent = "@media print{[data-ws-screen-only]{display:none!important}}";
+    (document.head || document.documentElement).appendChild(style);
+  }
 })();

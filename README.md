@@ -24,6 +24,13 @@ projects. Consumed as a **git submodule**, not an npm install.
 - `src/view-width.js` — on a local page (localhost or `file://`), a corner button that switches between
   the window's width and the page in a 390 px frame, so the phone layout is one click away. It does
   nothing on a deployed site. A Vite site imports it: `import "<web-shared>/src/view-width.js"`.
+
+  **Screen-only controls.** The font menu and the width button are tools for the person at the screen,
+  never part of the page. Each carries `data-ws-screen-only`, adds one print rule that hides that
+  attribute (the script brings it, since a site may import the script without these stylesheets), and
+  does not mount at all when `navigator.webdriver` is set, so a PDF render, a screenshot or a page check
+  sees the page alone. A new floating control follows the same three rules. (Nov 2026: a CV printed to
+  PDF from a local build carried "switch to phone width" into its text, fused with an employer's name.)
 - `src/viewer.js` — a picture viewer for galleries: a click on a picture inside `.ws-gallery` or any
   element with `data-ws-viewer` opens it large over the page (the href of the link around it, else
   the picture), captioned, with ←/→, swipes and side buttons stepping through that gallery; Esc or a
