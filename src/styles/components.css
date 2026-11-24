@@ -1119,6 +1119,79 @@ body.ws-wide {
   height: 14px;
   border-radius: 7px;
 }
+/* Stages: work known in parts that arrived over time. A track with data-parts holds one
+   <span class="ws-progress__part" data-tone="N" style="--from: 0%; --size: 61%; --value: 94%"> per
+   stage: --from and --size place the share of the work that stage added, --value is how far that
+   share is done, so added work lengthens the bar in its own colour instead of emptying it.
+   <ul class="ws-progress__stages"> after the overall list is the legend: per stage
+   <li><span class="ws-tag" data-tone="N">stage 2</span><span>figures</span><p>what it added</p></li>.
+   A row's own stages ride in <span class="ws-progress__tags"> of .ws-tag between name and figures. */
+.ws-progress__track[data-parts]::before {
+  content: none;
+}
+.ws-progress__part {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--from, 0%);
+  width: var(--size, 0%);
+  box-sizing: border-box;
+  background: color-mix(in srgb, var(--ws-tone) 30%, transparent);
+  transition: left 0.6s ease, width 0.6s ease;
+}
+.ws-progress__part + .ws-progress__part {
+  border-left: 2px solid var(--clight);
+}
+.ws-progress__part::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--value, 0%);
+  background: var(--ws-tone);
+  transition: width 0.6s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-progress__part,
+  .ws-progress__part::before { transition: none; }
+}
+.ws-progress__tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-right: auto;
+}
+/* The legend takes the overall row's columns and its border and padding, so each tag sits under
+   the state badge and each line of text starts under the bar. */
+.ws-progress__stages {
+  list-style: none;
+  margin: -0.5rem 0 1rem;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 6px 12px;
+  font-size: 0.85rem;
+  color: var(--cdark);
+}
+.ws-progress__stages > li {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: 2px;
+  align-items: baseline;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.ws-progress__stages > li > .ws-tag {
+  justify-self: start;
+}
+.ws-progress__stages > li > :not(.ws-tag) {
+  grid-column: 2;
+  min-width: 0;
+}
+.ws-progress__stages > li > p {
+  margin: 0;
+}
 
 /* Links (link-collection): <ul class="ws-links"><li><a href>…</a><span class="ws-links__note">…</span></li></ul>. */
 .ws-links {
